@@ -8,7 +8,7 @@ namespace Hathor
         string Name { get; }
 
         // 创建建筑
-        IBuilding create();
+        IBuilding Create();
     }
 
     public interface IBuildingGrowth
@@ -28,9 +28,9 @@ namespace Hathor
         string Desctiption { get; set; }
 
         // 对应建筑类
-        IBuildingClass getClass();
+        IBuildingClass GetClass();
 
         // 当前建筑成长
-        IBuildingGrowth getGrowth();
+        IBuildingGrowth GetGrowth();
     }
 }

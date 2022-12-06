@@ -9,20 +9,30 @@ CSHARP_FLAGS = -out:$(BUILD_EXEC) -target:exe
 CSHARP_COMPILER = mcs
 
 #if needed, change the executable file
-BUILD_PATH = Dist
-BUILD_EXEC = ${BUILD_PATH}/HathorCore
+BUILD_PATH = Build
+BUILD_EXEC = ${BUILD_PATH}/HathorCore.exe
 
+ifeq ($(OS), Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
+  detected_OS := Windows
+else
+  detected_OS := $(shell uname)  # same as "uname -s"
+endif
 
-all: build
+ifeq ($(detected_OS),Windows)
+  CMD_CREATE_PATH = md
+  CMD_DELETE_PATH = rmdir /s /q
+else
+  CMD_CREATE_PATH = mkdir -p
+  CMD_DELETE_PATH = rm -fr
+endif
 
-build: 
-	mkdir -p ${BUILD_PATH}
+build:
+	${CMD_CREATE_PATH} ${BUILD_PATH}
 	$(CSHARP_COMPILER) $(CSHARP_SOURCE_FILES) $(CSHARP_FLAGS)
 
 clean:
-	rm -f $(BUILD_EXEC)
+	$(CMD_DELETE_PATH) $(BUILD_PATH)
 
 remake:
 	$(MAKE) clean
 	$(MAKE)
-

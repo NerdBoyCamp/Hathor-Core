@@ -13,7 +13,41 @@ namespace Hathor
         string Desctiption { get; }
 
         // 创建角色
-        ICharacter create();
+        ICharacter Create();
+    }
+
+    // 战斗相关
+    public interface ICharacterBattle
+    {
+        // 血量
+        int HP { get; }
+
+        // 最大血量
+        int MaxHP { get; set; }
+
+        // 怒气
+        int AP { get; }
+
+        // 最大怒气
+        int MaxAP { get; set; }
+
+        // 延时回复计算
+        void DeferHeal(string series, int value);
+
+        void DeferHealUp(string series, float value);
+
+        // 延时伤害计算
+        void DeferDamage(string series, int value);
+
+        void DeferDamageUp(string series, float value);
+
+        // 增加/消耗AP
+        bool IncreaseAP(int value);
+
+        bool DecreaseAP(int value);
+
+        // 更新角色受到伤害
+        void Update(IEventListener listener);
     }
 
     public interface ICharacterGrowth
@@ -24,68 +58,92 @@ namespace Hathor
         // 等级
         int LV { get; }
 
-        // 可用加点
-        int AvailablePoint { get; }
+        // 总点数
+        int TotalPoints { get; }
 
-        // 增加经验
-        int increaseEXP(int exp);
+        // 已用加点
+        int UsedPoints { get; }
 
-        // 消耗点数
-        int decreasePoint(int point);
+        // 增加/消耗经验
+        bool IncreaseEXP(int exp);
+
+        // 增加/消耗总点数
+        bool IncreaseTotalPoints(int point);
+
+        // 增加/消耗总点数
+        bool IncreaseUsedPoints(int point);
+    }
+
+    // 角色受到影响的效果（技能效果/抗性/buff/debuff）
+    public interface ICharacterEffects
+    {
+        // 添加效果
+        IEffect AddEffect(IEffect effect);
+
+        // 删除效果
+        IEffect RemoveEffect(string effectID);
+
+        // 获取所有效果(按照优先级降序排列)
+        IEffect[] ListEffects();
+
+        // 更新角色身上效果
+        void Update(IEventListener listener);
     }
 
     // 角色能力/技能
     public interface ICharacterAbilities
     {
         // 添加能力
-        IEffectClass addAbility(IEffectClass effectClass);
+        IEffectClass AddAbility(IEffectClass effectClass);
 
         // 删除能力
-        IEffectClass removeAbility(string effectClassID);
+        IEffectClass RemoveAbility(string effectClassID);
 
         // 查找能力
-        IEffectClass getAbility(string effectClassID);
-        
-        // 获取所有能力(按照优先级降序排列)
-        IEffectClass[] listAbilities();
+        IEffectClass GetAbility(string effectClassID);
+
+        // 获取所有能力
+        IEffectClass[] ListAbilities();
     }
 
     // 角色装备
     public interface ICharacterEquipments
     {
         // 装备物品
-        IItem addEquipment(IItem item);
+        IItem AddEquipment(IItem item);
 
         // 卸下物品
-        IItem removeEquipment(string itemID);
+        IItem RemoveEquipment(string itemID);
 
         // 获取所有装备的物品
-        IItem[] listEquipments();
+        IItem[] ListEquipments();
     }
-    
+
     // 角色包裹
     public interface ICharacterBag
     {
         // 名字
         string Name { get; }
 
-        // 获取包裹容量 
+        // 获取包裹容量
         int Capacity { get; }
 
+        // // 是否锁定
+        // bool isLocked { get; set; }
         // 增加/减少包裹容量
-        bool extendCapacity(int slotCount);
+        bool ExtendCapacity(int slotCount);
 
         // 交换位置
-        bool swapItem(int slot1, int slot2);
+        bool SwapItem(int slot1, int slot2);
 
         // 保存物品
-        IItem storeItem(int slot, IItem item);
-        
+        IItem StoreItem(int slot, IItem item);
+
         // 丢弃物品
-        IItem dropItem(int slot);
-        
+        IItem DropItem(int slot);
+
         // 查看物品
-        IItem getItem(int slot);
+        IItem GetItem(int slot);
     }
 
     public interface ICharacter
@@ -96,22 +154,28 @@ namespace Hathor
         string Name { get; set; }
 
         // 对应的角色类
-        ICharacterClass getClass();
+        ICharacterClass GetClass();
+
+        // 当前角色战斗相关
+        ICharacterBattle GetBattle();
 
         // 当前角色成长
-        ICharacterGrowth getGrowth();
+        ICharacterGrowth GetGrowth();
 
         // 当前角色受到影响的效果（技能效果/抗性/buff/debuff）
-        IEffect[] getEffects();
+        ICharacterEffects GetEffects();
 
         // 当前角色能力/技能
-        ICharacterAbilities getAbilities();
+        ICharacterAbilities GetAbilities();
 
         // 当前角色装备
-        ICharacterEquipments getEquipments(); 
+        ICharacterEquipments GetEquipments();
 
         // 当前角色的背包
-        ICharacterBag[] getBags();
+        ICharacterBag[] ListBags();
+
+        // 更新角色/每帧调用
+        void Update(IEventListener listener);
     }
 
     // public interface ICharacterForAdventure
@@ -128,22 +192,4 @@ namespace Hathor
     //     // 相貌
     //     int Appearance { get; }
     // }
-
-    // public interface ICharacterForBattle
-    // {
-    //     int HP { get; }
-
-    //     // 怒气
-    //     int AP { get; }
-
-    //     // 力量
-    //     int Strength { get; }
-
-    //     // 智力
-    //     int Intelligence { get; }
-
-    //     // 敏捷
-    //     int Agile { get; }
-    // }
 }
-

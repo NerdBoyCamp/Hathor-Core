@@ -1,9 +1,13 @@
 namespace Hathor
 {
-    public interface IEvent
+    public interface IEventListener
     {
-        string ID { get; }
+        void OnNotify(IEvent ev);
     }
 
-    public interface IEventBattle : IEvent { }
+    public interface IEvent
+    {
+        // 事件类别
+        string Series { get; }
+    }
 }

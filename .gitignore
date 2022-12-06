@@ -492,4 +492,5 @@ tags
 [._]*.un~
 
 Dist/*
+Build/*
 # End of https://www.toptal.com/developers/gitignore/api/csharp,vim,monodevelop,unity

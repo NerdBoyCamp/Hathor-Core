@@ -10,24 +10,43 @@ namespace Hathor
         // 描述
         string Desctiption { get; }
 
+        // 标签
+        string[] Tags { get; }
+
         // 创建
-        IItem create();
+        IItem Create();
+    }
+
+    // 物品受到影响的效果（技能效果/抗性/buff/debuff）
+    public interface IItemEffects
+    {
+        // 添加效果
+        IEffect AddEffect(IEffect effect);
+
+        // 删除效果
+        IEffect RemoveEffect(string effectID);
+
+        // 获取所有效果
+        IEffect[] ListEffects();
+
+        // 更新状态
+        void Update();
     }
 
     // 物品能力/技能
     public interface IItemAbilities
     {
         // 添加能力
-        IEffectClass addAbility(IEffectClass effectClass);
+        IEffectClass AddAbility(IEffectClass effectClass);
 
         // 删除能力
-        IEffectClass removeAbility(string effectClassID);
+        IEffectClass RemoveAbility(string effectClassID);
 
         // 查找能力
-        IEffectClass getAbility(string effectClassID);
-        
-        // 获取所有能力(按照优先级降序排列)
-        IEffectClass[] listAbilities();
+        IEffectClass GetAbility(string effectClassID);
+
+        // 获取所有能力
+        IEffectClass[] ListAbilities();
     }
 
     public interface IItem
@@ -38,22 +57,22 @@ namespace Hathor
         string Name { get; }
 
         // 是否可用
-        bool isUsable { get; }
+        bool IsUsable { get; }
 
         // 道具类
-        IItemClass getClass();
+        IItemClass GetClass();
 
         // 当前道具受到影响的效果（技能效果/抗性/buff/debuff）
-        IEffect[] getEffects();
+        IItemEffects GetEffects();
 
         // 当前道具拥有的可触发效果（能力/技能）
-        IItemAbilities getAbilities();
+        IItemAbilities GetAbilities();
 
-       // 判断建筑是否可以装备物品
-        bool isEquipableByBuilding(IBuilding building);
+        // 判断建筑是否可以装备物品
+        bool IsEquipableByBuilding(IBuilding building);
 
         // 判断角色是否可以装备物品
-        bool isEquipableByCharacter(ICharacter character);
+        bool IsEquipableByCharacter(ICharacter character);
     }
 
     // public interface IItemQualification
