@@ -47,7 +47,7 @@ namespace Hathor
         bool DecreaseAP(int value);
 
         // 更新角色受到伤害
-        void Update(IEventListener listener);
+        void Update();
     }
 
     public interface ICharacterGrowth
@@ -87,7 +87,7 @@ namespace Hathor
         IEffect[] ListEffects();
 
         // 更新角色身上效果
-        void Update(IEventListener listener);
+        void Update();
     }
 
     // 角色能力/技能
@@ -109,14 +109,50 @@ namespace Hathor
     // 角色装备
     public interface ICharacterEquipments
     {
-        // 装备物品
-        IItem AddEquipment(IItem item);
+        // 头
+        IItem Head { get; }
 
-        // 卸下物品
-        IItem RemoveEquipment(string itemID);
+        // 右手
+        IItem RightHand { get; }
 
-        // 获取所有装备的物品
-        IItem[] ListEquipments();
+        // 左手
+        IItem LeftHand { get; }
+
+        // 胸
+        IItem Chest { get; }
+
+        // 腰
+        IItem Waist { get; }
+
+        // 脚
+        IItem Feet { get; }
+
+        // 装备物品，返回之前的物品
+        IItem EquipHead(IItem item);
+
+        // 装备，返回之前的装备
+        IItem EquipRightHand(IItem item);
+
+        // 装备，返回之前的装备
+        IItem EquipLeftHand(IItem item);
+
+        // 装备，返回之前的装备
+        IItem EquipChest(IItem item);
+
+        // 装备，返回之前的装备
+        IItem EquipWaist(IItem item);
+
+        // 装备，返回之前的装备
+        IItem EquipFeet(IItem item);
+
+        // // 装备饰品
+        // IItem EquipOrnament(IItem item);
+
+        // // 卸下饰品
+        // IItem RemoveOrnament(string itemID);
+
+        // // 获取所有装饰品
+        // IItem[] ListOrnaments();
     }
 
     // 角色包裹
@@ -174,8 +210,14 @@ namespace Hathor
         // 当前角色的背包
         ICharacterBag[] ListBags();
 
+        // 触发角色变化的事件
+        void Publish(IEvent ev);
+
+        // 订阅角色变化的事件/设置监听者
+        void Subscribe(IEventListener listener);
+
         // 更新角色/每帧调用
-        void Update(IEventListener listener);
+        void Update();
     }
 
     // public interface ICharacterForAdventure

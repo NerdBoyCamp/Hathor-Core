@@ -1,5 +1,3 @@
-using System;
-
 namespace Hathor
 {
     public interface IEffectClass
@@ -56,13 +54,13 @@ namespace Hathor
         // 对应的效果类（角色能力/道具能力）
         IEffectClass GetClass();
 
-        // 对建筑产生效果 (返回false, 表示无效果)
+        // 对建筑产生效果
         void ApplyOnBuilding(IBuilding building);
 
-        // 对角色产生效果 (返回false, 表示无效果)
+        // 对角色产生效果
         void ApplyOnCharacter(ICharacter character);
 
-        // 对物品产生效果 (返回false, 表示无效果）
+        // 对物品产生效果
         void ApplyOnItem(IItem item);
     }
 }

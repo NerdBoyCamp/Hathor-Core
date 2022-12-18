@@ -143,7 +143,7 @@ namespace Hathor
             return this.mEffects.ToArray();
         }
 
-        public void Update(IEventListener listener)
+        public void Update()
         {
             this.SortEffects();
             for (int i = this.mEffects.Count - 1; i >= 0; i--)
@@ -158,10 +158,7 @@ namespace Hathor
                 else
                 {
                     eff.ApplyOnCharacter(this.mChar);
-                    if (listener != null)
-                    {
-                        listener.OnNotify(new EffectEvent { Effect = eff });
-                    }
+                    this.mChar.Publish(new EffectEvent { Effect = eff });
                 }
             }
         }

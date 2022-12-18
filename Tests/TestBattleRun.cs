@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hathor;
 
 namespace Hathor
 {
@@ -9,20 +10,17 @@ namespace Hathor
         {
             // Display the number of command line arguments.
             // Console.WriteLine(args.Length);
-            var a = new Dictionary<string, int>();
-            a["a"] = 1;
-            a["a"] = 2;
-
-            var b = 0;
-            var c = 0;
-            Console.WriteLine(a["a"]);
-            Console.WriteLine(a.TryGetValue("a", out b));
-            Console.WriteLine(a.TryGetValue("b", out c));
-            Console.WriteLine(b);
-            Console.WriteLine(c);
-
-            // a.TryGetValue()
-            // Console.WriteLine(a.Count);
+            // var a = new Dictionary<string, int>();
+            // a["a"] = 1;
+            // a["a"] = 2;
+            // var b = 0;
+            // var c = 0;
+            // Console.WriteLine(a["a"]);
+            // Console.WriteLine(a.TryGetValue("a", out b));
+            // Console.WriteLine(a.TryGetValue("b", out c));
+            // Console.WriteLine(b);
+            // Console.WriteLine(c);
+            Console.WriteLine(Util.RamdonID());
         }
     }
 }

@@ -12,7 +12,10 @@ namespace Hathor
         protected string mID;
 
         // Name
-        public string mName;
+        protected string mName;
+
+        // 监听者
+        protected IEventListener mListener = null;
 
         // 角色战斗
         public ICharacterBattle mBattle = null;
@@ -69,16 +72,27 @@ namespace Hathor
                 return Array.Empty<ICharacterBag>();
             }
             return this.mBags;
-        } 
+        }
+
+        public void Publish(IEvent ev) {
+            if (this.mListener != null) {
+                this.mListener.OnNotify(ev);
+            }
+        }
+
+        public void Subscribe(IEventListener listener)
+        {
+            this.mListener = listener;
+        }
 
         // 更新角色/每帧调用
-        public void Update(IEventListener listener) { 
+        public void Update() { 
             if (this.mEffects != null) {
-                this.mEffects.Update(listener);
+                this.mEffects.Update();
             }
 
             if (this.mBattle != null) {
-                this.mBattle.Update(listener);
+                this.mBattle.Update();
             }
         }
     }

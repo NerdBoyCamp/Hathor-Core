@@ -7,13 +7,13 @@ namespace Hathor
     {
         protected ICharacter mChar;
 
-        protected int mHP = 0;
+        public int mHP = 0;
 
-        protected int mAP = 0;
+        public int mAP = 0;
 
-        protected int mMaxHP = 0;
+        public int mMaxHP = 0;
 
-        protected int mMaxAP = 0;
+        public int mMaxAP = 0;
 
         protected Dictionary<string, int> mHeals = new Dictionary<string, int>();
 
@@ -23,7 +23,7 @@ namespace Hathor
             this.mChar = character;
         }
 
-        protected int UpdateHeal(IEventListener listener) {
+        protected int UpdateHeal() {
             var value = 0;
             foreach(var heal in this.mHeals) {
                 value += heal.Value;
@@ -32,16 +32,18 @@ namespace Hathor
             return value;
         }
 
-        protected int UpdateDamage(IEventListener listener) {
+        protected int UpdateDamage() {
             var value = 0;
             foreach(var damage in this.mDamages) {
-                value += damage.Value;
-                if (listener != null) {
-                    listener.OnNotify(new BattleDamageEvent{
-                        Character = this.mChar,
-                        Damage = value
-                    });
+                if (value <= 0) {
+                    continue;
                 }
+
+                value += damage.Value;
+                this.mChar.Publish(new BattleDamageEvent{
+                    Character = this.mChar,
+                    Damage = value
+                });
             }
             this.mDamages.Clear();
             return value;
@@ -93,9 +95,9 @@ namespace Hathor
             return false;
         }
 
-        public void Update(IEventListener listener) {
+        public void Update() {
             // 更新血量 -------------------------------------
-            var HPDelta = this.UpdateHeal(listener) - this.UpdateDamage(listener);
+            var HPDelta = this.UpdateHeal() - this.UpdateDamage();
             if (this.mHP >= this.mMaxAP) {
                 // 如果血量已满或超过上限，就不加血了
                 if (HPDelta > 0) {
