@@ -2,7 +2,7 @@ using System;
 
 namespace Hathor
 {
-    class DefaultCharacterBag : ICharacterBag {
+    class DefaultCharacterStore : ICharacterStore {
         // 角色
         protected ICharacter mChar;
 
@@ -22,7 +22,7 @@ namespace Hathor
         public int Capacity { get => this.mCapacity; }
 
         // 构造
-        public DefaultCharacterBag(ICharacter character, string name, int capacity) {
+        public DefaultCharacterStore(ICharacter character, string name, int capacity) {
             this.mChar = character;
             this.mName = name;
             this.mCapacity = capacity;

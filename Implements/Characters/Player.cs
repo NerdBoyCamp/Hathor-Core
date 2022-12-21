@@ -17,6 +17,9 @@ namespace Hathor
         // 监听者
         protected IEventListener mListener = null;
 
+        // 角色属性
+        public ICharacterAttributes mAttributes = null;
+
         // 角色战斗
         public ICharacterBattle mBattle = null;
 
@@ -33,7 +36,7 @@ namespace Hathor
         public ICharacterEquipments mEquipments = null;
 
         // 角色背包
-        public ICharacterBag[] mBags = null;
+        public ICharacterStores mStores = null;
 
         // --------------------------------------------------
         // ID
@@ -51,6 +54,9 @@ namespace Hathor
         // 对应的角色类
         public ICharacterClass GetClass() { return this.mCls; }
 
+        // 当前角色属性
+        public ICharacterAttributes GetAttributes() { return this.mAttributes; }
+
         // 当前角色战斗
         public ICharacterBattle GetBattle() { return this.mBattle; }
 
@@ -67,12 +73,7 @@ namespace Hathor
         public ICharacterEquipments GetEquipments() { return this.mEquipments; }
 
         // 当前角色的背包
-        public ICharacterBag[] ListBags() {
-            if (this.mBags == null) {
-                return Array.Empty<ICharacterBag>();
-            }
-            return this.mBags;
-        }
+        public ICharacterStores GetStores() { return this.mStores; }
 
         public void Publish(IEvent ev) {
             if (this.mListener != null) {

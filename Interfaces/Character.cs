@@ -16,6 +16,30 @@ namespace Hathor
         ICharacter Create();
     }
 
+    public interface ICharacterAttributes
+    {
+        // 感应
+        int Perception { get; }
+
+        // 运气
+        int Luck { get; }
+
+        // 口才
+        int Eloquence { get; }
+
+        // 相貌
+        int Appearance { get; }
+
+        // 力量
+        int Strength { get; }
+
+        // 智力
+        int Intelligence { get; }
+
+        // 敏捷
+        int Agile { get; }
+    }
+
     // 战斗相关
     public interface ICharacterBattle
     {
@@ -156,7 +180,7 @@ namespace Hathor
     }
 
     // 角色包裹
-    public interface ICharacterBag
+    public interface ICharacterStore
     {
         // 名字
         string Name { get; }
@@ -182,6 +206,15 @@ namespace Hathor
         IItem GetItem(int slot);
     }
 
+    public interface ICharacterStores
+    {
+        // 随身背包
+        ICharacterStore Knapsack { get; }
+
+        // 仓库
+        ICharacterStore Warehouse { get; }
+    }
+
     public interface ICharacter
     {
         string ID { get; }
@@ -191,6 +224,9 @@ namespace Hathor
 
         // 对应的角色类
         ICharacterClass GetClass();
+
+        // 当前角色属性
+        ICharacterAttributes GetAttributes();
 
         // 当前角色战斗相关
         ICharacterBattle GetBattle();
@@ -208,7 +244,7 @@ namespace Hathor
         ICharacterEquipments GetEquipments();
 
         // 当前角色的背包
-        ICharacterBag[] ListBags();
+        ICharacterStores GetStores();
 
         // 触发角色变化的事件
         void Publish(IEvent ev);
@@ -219,19 +255,4 @@ namespace Hathor
         // 更新角色/每帧调用
         void Update();
     }
-
-    // public interface ICharacterForAdventure
-    // {
-    //     // 感应
-    //     int Perception { get; }
-
-    //     // 运气
-    //     int Luck { get; }
-
-    //     // 口才
-    //     int Eloquence { get; }
-
-    //     // 相貌
-    //     int Appearance { get; }
-    // }
 }
