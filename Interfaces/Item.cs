@@ -17,6 +17,19 @@ namespace Hathor
         IItem Create();
     }
 
+    // 物品装备推荐条件（决定发挥度）
+    public interface IItemBattle
+    {
+        // 力量
+        int Strength { get; }
+
+        // 智力
+        int Intelligence { get; }
+
+        // 敏捷
+        int Dexterity { get; }
+    }
+
     // 物品受到影响的效果（技能效果/抗性/buff/debuff）
     public interface IItemEffects
     {

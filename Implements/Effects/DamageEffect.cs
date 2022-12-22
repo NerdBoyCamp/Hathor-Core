@@ -1,20 +1,36 @@
+using System;
+
 namespace Hathor
 {
-    class HitEffectClass : IEffectClass
+    class DamageEffectClass : IEffectClass
     {
         protected string mID;
 
-        public HitEffectClass(string id) {
+        protected string mSeries;
+
+        protected int mMaxDamage;
+
+        protected int mMinDamage;
+
+        public DamageEffectClass(
+            string id,
+            string series,
+            int maxDamage,
+            int minDamage
+        ) {
             this.mID = id;
+            this.mSeries = series;
+            this.mMaxDamage = Math.Max(maxDamage, minDamage);
+            this.mMinDamage = Math.Min(maxDamage, minDamage);
         }
 
         public string ID { get => this.mID; }
 
         // 系列（物理/电/辐射/迷信/其他...）
-        public string Series { get => "phys"; }
+        public string Series { get => this.mSeries; }
 
         // 名字
-        public string Name { get => "Hit Effect"; }
+        public string Name { get => ""; }
 
         // 描述
         public string Desctiption { get => ""; }
@@ -28,6 +44,15 @@ namespace Hathor
         // 对自己施放
         public bool IsSelf { get => false; }
 
+        // 是否可影响建筑
+        public bool IsAppliableOnBuilding { get => false; }
+
+        // 是否可影响角色
+        public bool IsAppliableOnCharacter { get => true; }
+
+        // 是否可影响道具
+        public bool IsAppliableOnItem { get => false; }
+
         // 通过建筑生成
         public IEffect CreateByBuilding(IBuilding building)
         {
@@ -37,7 +62,15 @@ namespace Hathor
         // 通过角色生成
         public IEffect CreateByCharacter(ICharacter character)
         {
-            return null;
+            var battle = character.GetBattle();
+            if (battle == null) {
+                return null;
+            }
+
+            return new DamageEffect(
+                this,
+                Util.RamdonID(),
+                Util.RandomInt(this.mMinDamage, this.mMaxDamage));
         }
 
         // 通过物品生成
@@ -48,7 +81,7 @@ namespace Hathor
 
     }
 
-    class HitEffect : IEffect
+    class DamageEffect : IEffect
     {
         protected IEffectClass mCls;
 
@@ -58,7 +91,7 @@ namespace Hathor
 
         protected bool mIsFinished = false;
 
-        public HitEffect(IEffectClass cls, string id, int damage)
+        public DamageEffect(IEffectClass cls, string id, int damage)
         {
             this.mCls = cls;
             this.mID = id;
@@ -73,15 +106,6 @@ namespace Hathor
         // 是否效果结束
         public bool IsFinished { get => this.mIsFinished; }
 
-        // 是否可影响建筑
-        public bool IsAppliableOnBuilding { get => false; }
-
-        // 是否可影响角色
-        public bool IsAppliableOnCharacter { get => true; }
-
-        // 是否可影响道具
-        public bool IsAppliableOnItem { get => false; }
-
         // 对应的效果类（角色能力/道具能力）
         public IEffectClass GetClass() { return this.mCls; }
 
@@ -91,13 +115,12 @@ namespace Hathor
         // 对角色产生效果
         public void ApplyOnCharacter(ICharacter character)
         {
-            this.mIsFinished = true;
             var battle = character.GetBattle();
-            if (battle == null)
+            if (battle != null)
             {
-                return;
+                battle.DeferDamage(this.mCls.Series, this.mDamage);
             }
-            battle.DeferDamage(this.mCls.Series, this.mDamage);
+            this.mIsFinished = true;
         }
 
         // 对物品产生效果

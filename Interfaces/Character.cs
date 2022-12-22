@@ -1,3 +1,5 @@
+using System;
+
 namespace Hathor
 {
     // 角色类（可作为NPC或者敌人的创建模板）
@@ -16,28 +18,19 @@ namespace Hathor
         ICharacter Create();
     }
 
-    public interface ICharacterAttributes
+    public interface ICharacterAdventure
     {
         // 感应
-        int Perception { get; }
+        int Perception { get; set; }
 
         // 运气
-        int Luck { get; }
+        int Luck { get; set; }
 
         // 口才
-        int Eloquence { get; }
+        int Eloquence { get; set; }
 
         // 相貌
-        int Appearance { get; }
-
-        // 力量
-        int Strength { get; }
-
-        // 智力
-        int Intelligence { get; }
-
-        // 敏捷
-        int Agile { get; }
+        int Appearance { get; set; }
     }
 
     // 战斗相关
@@ -47,13 +40,22 @@ namespace Hathor
         int HP { get; }
 
         // 最大血量
-        int MaxHP { get; set; }
+        int MaxHP { get; }
 
         // 怒气
         int AP { get; }
 
         // 最大怒气
-        int MaxAP { get; set; }
+        int MaxAP { get; }
+
+        // 力量
+        int Strength { get; }
+
+        // 智力
+        int Intelligence { get; }
+
+        // 敏捷
+        int Dexterity { get; }
 
         // 延时回复计算
         void DeferHeal(string series, int value);
@@ -65,13 +67,8 @@ namespace Hathor
 
         void DeferDamageUp(string series, float value);
 
-        // 增加/消耗AP
-        bool IncreaseAP(int value);
-
-        bool DecreaseAP(int value);
-
         // 更新角色受到伤害
-        void Update();
+        void FlushDamage();
     }
 
     public interface ICharacterGrowth
@@ -225,8 +222,8 @@ namespace Hathor
         // 对应的角色类
         ICharacterClass GetClass();
 
-        // 当前角色属性
-        ICharacterAttributes GetAttributes();
+        // 当前角色冒险属性
+        ICharacterAdventure GetAdventure();
 
         // 当前角色战斗相关
         ICharacterBattle GetBattle();

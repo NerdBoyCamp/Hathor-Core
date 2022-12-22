@@ -4,7 +4,6 @@ namespace Hathor
 {
     class Player : ICharacter
     {
-        // 成员变量 -----------------------------------------
         // 所属类别
         protected ICharacterClass mCls;
 
@@ -15,10 +14,10 @@ namespace Hathor
         protected string mName;
 
         // 监听者
-        protected IEventListener mListener = null;
+        public IEventListener mListener = null;
 
         // 角色属性
-        public ICharacterAttributes mAttributes = null;
+        public ICharacterAdventure mAttributes = null;
 
         // 角色战斗
         public ICharacterBattle mBattle = null;
@@ -55,7 +54,7 @@ namespace Hathor
         public ICharacterClass GetClass() { return this.mCls; }
 
         // 当前角色属性
-        public ICharacterAttributes GetAttributes() { return this.mAttributes; }
+        public ICharacterAdventure GetAdventure() { return this.mAttributes; }
 
         // 当前角色战斗
         public ICharacterBattle GetBattle() { return this.mBattle; }
@@ -93,7 +92,7 @@ namespace Hathor
             }
 
             if (this.mBattle != null) {
-                this.mBattle.Update();
+                this.mBattle.FlushDamage();
             }
         }
     }

@@ -22,6 +22,15 @@ namespace Hathor
         // 对自己施放
         bool IsSelf { get; }
 
+        // 是否可影响建筑
+        bool IsAppliableOnBuilding { get; }
+
+        // 是否可影响角色
+        bool IsAppliableOnCharacter { get; }
+
+        // 是否可影响道具
+        bool IsAppliableOnItem { get; }
+
         // 通过建筑生成
         IEffect CreateByBuilding(IBuilding building);
 
@@ -41,15 +50,6 @@ namespace Hathor
 
         // 是否效果结束
         bool IsFinished { get; }
-
-        // 是否可影响建筑
-        bool IsAppliableOnBuilding { get; }
-
-        // 是否可影响角色
-        bool IsAppliableOnCharacter { get; }
-
-        // 是否可影响道具
-        bool IsAppliableOnItem { get; }
 
         // 对应的效果类（角色能力/道具能力）
         IEffectClass GetClass();

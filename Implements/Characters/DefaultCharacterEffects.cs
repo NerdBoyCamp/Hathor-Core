@@ -94,7 +94,7 @@ namespace Hathor
         // 添加效果
         public IEffect AddEffect(IEffect effect)
         {
-            if (!effect.IsAppliableOnCharacter)
+            if (!effect.GetClass().IsAppliableOnCharacter)
             {
                 // 无法对角色产生影响
                 return null;
@@ -150,7 +150,7 @@ namespace Hathor
             {
                 // 逆向遍历，优先级高的先执行
                 IEffect eff = this.mEffects[i];
-                if (eff.IsFinished || !eff.IsAppliableOnCharacter)
+                if (eff.IsFinished)
                 {
                     // 删除已经执行完的效果
                     this.mEffects.RemoveAt(i);
