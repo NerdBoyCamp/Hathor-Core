@@ -1,27 +1,21 @@
-using System;
-
 namespace Hathor
 {
-    class DamageEffectClass : IEffectClass
+    class DefenceEffectClass : IEffectClass
     {
         protected string mID;
 
         protected string mSeries;
 
-        protected int mMaxDamage;
+        protected int mDefence;
 
-        protected int mMinDamage;
-
-        public DamageEffectClass(
+        public DefenceEffectClass(
             string id,
             string series,
-            int maxDamage,
-            int minDamage
+            int defence
         ) {
             this.mID = id;
             this.mSeries = series;
-            this.mMaxDamage = Math.Max(maxDamage, minDamage);
-            this.mMinDamage = Math.Min(maxDamage, minDamage);
+            this.mDefence = defence;
         }
 
         public string ID { get => this.mID; }
@@ -36,13 +30,13 @@ namespace Hathor
         public string Desctiption { get => ""; }
 
         // 优先级
-        public int Priority { get => 100; }
+        public int Priority { get => 0; }
 
         // 自动施放
-        public bool IsAuto { get => false; }
+        public bool IsAuto { get => true; }
 
         // 对自己施放
-        public bool IsSelf { get => false; }
+        public bool IsSelf { get => true; }
 
         // 是否可影响建筑
         public bool IsAppliableOnBuilding { get => false; }
@@ -67,10 +61,7 @@ namespace Hathor
                 return null;
             }
 
-            return new DamageEffect(
-                this,
-                Util.RamdonID(),
-                Util.RandomInt(this.mMinDamage, this.mMaxDamage));
+            return new DefenceEffect(this, Util.RamdonID());
         }
 
         // 通过物品生成
@@ -79,30 +70,25 @@ namespace Hathor
             return null;
         }
 
-        class DamageEffect : IEffect
+        class DefenceEffect : IEffect
         {
-            protected DamageEffectClass mCls;
+            protected DefenceEffectClass mCls;
 
             protected string mID;
 
-            protected int mDamage;
-
-            protected bool mIsFinished = false;
-
-            public DamageEffect(DamageEffectClass cls, string id, int damage)
+            public DefenceEffect(DefenceEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
-                this.mDamage = damage;
             }
 
             public string ID { get => this.mID; }
 
             // 描述
-            public string Desctiption { get => null; }
+            public string Desctiption { get => ""; }
 
             // 是否效果结束
-            public bool IsFinished { get => this.mIsFinished; }
+            public bool IsFinished { get => false; }
 
             // 对应的效果类（角色能力/道具能力）
             public IEffectClass GetClass() { return this.mCls; }
@@ -116,14 +102,12 @@ namespace Hathor
                 var battle = character.GetBattle();
                 if (battle != null)
                 {
-                    battle.DeferDamage(this.mCls.Series, this.mDamage);
+                    battle.DeferDamage(this.mCls.Series, -this.mCls.mDefence);
                 }
-                this.mIsFinished = true;
             }
 
             // 对物品产生效果
             public void ApplyOnItem(IItem item) {}
         }
-
     }
 }

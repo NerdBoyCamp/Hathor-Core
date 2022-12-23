@@ -1,27 +1,25 @@
-using System;
-
 namespace Hathor
 {
-    class DamageEffectClass : IEffectClass
+    class HealEffectClass : IEffectClass
     {
         protected string mID;
 
         protected string mSeries;
 
-        protected int mMaxDamage;
+        protected int mHealAmount; // 回复的HP
 
-        protected int mMinDamage;
+        protected float mHealSeconds; // 在多少时间内回复
 
-        public DamageEffectClass(
+        public HealEffectClass(
             string id,
             string series,
-            int maxDamage,
-            int minDamage
+            int healAmount,
+            float healSeconds
         ) {
             this.mID = id;
             this.mSeries = series;
-            this.mMaxDamage = Math.Max(maxDamage, minDamage);
-            this.mMinDamage = Math.Min(maxDamage, minDamage);
+            this.mHealAmount = healAmount;
+            this.mHealSeconds = healSeconds;
         }
 
         public string ID { get => this.mID; }
@@ -56,53 +54,45 @@ namespace Hathor
         // 通过建筑生成
         public IEffect CreateByBuilding(IBuilding building)
         {
-            return null;
+            return new HealEffect(this, Util.RamdonID());
         }
 
         // 通过角色生成
         public IEffect CreateByCharacter(ICharacter character)
         {
-            var battle = character.GetBattle();
-            if (battle == null) {
-                return null;
-            }
-
-            return new DamageEffect(
-                this,
-                Util.RamdonID(),
-                Util.RandomInt(this.mMinDamage, this.mMaxDamage));
+            return new HealEffect(this, Util.RamdonID());
         }
 
         // 通过物品生成
         public IEffect CreateByItem(IItem item)
         {
-            return null;
+            return new HealEffect(this, Util.RamdonID());
         }
 
-        class DamageEffect : IEffect
+
+        class HealEffect : IEffect
         {
-            protected DamageEffectClass mCls;
+            protected HealEffectClass mCls;
 
             protected string mID;
 
-            protected int mDamage;
+            protected int mHealAmount; // 剩下要回复的HP
 
-            protected bool mIsFinished = false;
+            protected float mHealLastTime; // 上一次回复的时间
 
-            public DamageEffect(DamageEffectClass cls, string id, int damage)
+            public HealEffect(HealEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
-                this.mDamage = damage;
             }
 
             public string ID { get => this.mID; }
 
             // 描述
-            public string Desctiption { get => null; }
+            public string Desctiption { get => ""; }
 
             // 是否效果结束
-            public bool IsFinished { get => this.mIsFinished; }
+            public bool IsFinished { get => this.mHealAmount <= 0; }
 
             // 对应的效果类（角色能力/道具能力）
             public IEffectClass GetClass() { return this.mCls; }
@@ -114,16 +104,18 @@ namespace Hathor
             public void ApplyOnCharacter(ICharacter character)
             {
                 var battle = character.GetBattle();
-                if (battle != null)
+                if (battle == null)
                 {
-                    battle.DeferDamage(this.mCls.Series, this.mDamage);
+                    this.mHealAmount = 0;
                 }
-                this.mIsFinished = true;
+                else
+                {
+                    // battle.DeferHeal(this.mCls.Series, this.mDefence);
+                }
             }
 
             // 对物品产生效果
             public void ApplyOnItem(IItem item) {}
         }
-
     }
 }

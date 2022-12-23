@@ -18,59 +18,6 @@ namespace Hathor
         ICharacter Create();
     }
 
-    public interface ICharacterAdventure
-    {
-        // 感应
-        int Perception { get; set; }
-
-        // 运气
-        int Luck { get; set; }
-
-        // 口才
-        int Eloquence { get; set; }
-
-        // 相貌
-        int Appearance { get; set; }
-    }
-
-    // 战斗相关
-    public interface ICharacterBattle
-    {
-        // 血量
-        int HP { get; }
-
-        // 最大血量
-        int MaxHP { get; }
-
-        // 怒气
-        int AP { get; }
-
-        // 最大怒气
-        int MaxAP { get; }
-
-        // 力量
-        int Strength { get; }
-
-        // 智力
-        int Intelligence { get; }
-
-        // 敏捷
-        int Dexterity { get; }
-
-        // 延时回复计算
-        void DeferHeal(string series, int value);
-
-        void DeferHealUp(string series, float value);
-
-        // 延时伤害计算
-        void DeferDamage(string series, int value);
-
-        void DeferDamageUp(string series, float value);
-
-        // 更新角色受到伤害
-        void FlushDamage();
-    }
-
     public interface ICharacterGrowth
     {
         // 经验值

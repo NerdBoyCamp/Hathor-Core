@@ -17,19 +17,6 @@ namespace Hathor
         IItem Create();
     }
 
-    // 物品装备推荐条件（决定发挥度）
-    public interface IItemBattle
-    {
-        // 力量
-        int Strength { get; }
-
-        // 智力
-        int Intelligence { get; }
-
-        // 敏捷
-        int Dexterity { get; }
-    }
-
     // 物品受到影响的效果（技能效果/抗性/buff/debuff）
     public interface IItemEffects
     {
@@ -81,33 +68,15 @@ namespace Hathor
         // 当前道具拥有的可触发效果（能力/技能）
         IItemAbilities GetAbilities();
 
+        // 当前道具战斗相关
+        IItemBattle GetBattle();
+
         // 判断建筑是否可以装备物品
         bool IsEquipableByBuilding(IBuilding building);
 
         // 判断角色是否可以装备物品
         bool IsEquipableByCharacter(ICharacter character);
     }
-
-    // public interface IItemQualification
-    // {
-    //     // 需要力量
-    //     int StrengthRequired { get; }
-
-    //     // 需要智力
-    //     int IntelligenceRequired { get; }
-
-    //     // 需要敏捷
-    //     int AgileRequired { get; }
-    // }
-
-    // public interface IItemForBattle
-    // {
-    //     // 最小伤害
-    //     int MinDamage { get; }
-
-    //     // 最大伤害
-    //     int MaxDamage { get; }
-    // }
 
     // public interface IItemBattleEx
     // {
