@@ -9,23 +9,18 @@ namespace Hathor
         protected Dictionary<string, int> mHeals = new Dictionary<string, int>();
         protected Dictionary<string, int> mDamages = new Dictionary<string, int>();
 
-        public int mHP = 0;
-        public int mMaxHP = 0;
-        public int mMaxHPExtra = 0;
-        public int mAP = 0;
-        public int mMaxAP = 0;
-        public int mMaxAPExtra = 0;
-        public int mStrength = 0;
-        public int mStrengthExtra = 0;
-        public int mIntelligence = 0;
-        public int mIntelligenceExtra = 0;
-        public int mDexterity = 0;
-        public int mDexterityExtra = 0;
-        public Dictionary<string, int> mResistance = new Dictionary<string, int>();
-        public Dictionary<string, int> mResistanceExtra = new Dictionary<string, int>();
+        protected Dictionary<string, int> mAttributes = null;
+        protected Dictionary<string, int> mAttributesRaw = null;
+        protected int mHP = 0;
+        protected int mAP = 0;
 
-        public DefaultCharacterBattle(ICharacter character) {
+        public DefaultCharacterBattle(
+            ICharacter character,
+            Dictionary<string, int> attributes
+        ) {
             this.mChar = character;
+            this.mAttributes = new Dictionary<string, int>(attributes);
+            this.mAttributesRaw = new Dictionary<string, int>(attributes);
         }
 
         protected int UpdateHeal() {
@@ -53,30 +48,69 @@ namespace Hathor
             this.mDamages.Clear();
             return value;
         }
+        
+
+        // 最大血量
+        public int MaxHP { get => this.GetAttrValue("MaxHP"); }
+
+        // 最大怒气
+        public int MaxAP { get => this.GetAttrValue("MaxAP"); }
+
+        // 力量
+        public int Strength { get => this.GetAttrValue("Str"); }
+
+        // 智力
+        public int Intelligence { get => this.GetAttrValue("Int"); }
+
+        // 敏捷
+        public int Dexterity { get => this.GetAttrValue("Dex"); }
+
+        // 获取额外属性值
+        public int GetAttrValue(string attr)
+        {
+            int value = 0;
+            this.mAttributes.TryGetValue(attr, out value);
+            return value;
+        }
+
+        // 降低属性
+        public void Demote(string attr, string id, int value)
+        {
+            // TODO: To be implemented
+        }
+
+        // 降低属性的增幅
+        public void DemoteAmplify(string attr, string id, float value)
+        {
+            // TODO: To be implemented
+        }
+
+        // 提升属性
+        public void Promote(string attr, string id, int value)
+        {
+            // TODO: To be implemented
+        }
+
+        // 提升属性的增幅
+        public void PromoteAmplify(string attr, string id, float value)
+        {
+            // TODO: To be implemented
+        }
+
+        // 消除所有提升和降低
+        public void PromoteClear(string id)
+        {
+            // TODO: To be implemented
+        }
 
         // 血量
         public int HP { get => this.mHP; }
 
-        // 最大血量
-        public int MaxHP { get => this.mMaxHP + this.mMaxHPExtra; }
-
         // 怒气
         public int AP { get => this.mAP; }
 
-        // 最大怒气
-        public int MaxAP { get => this.mMaxAP + this.mMaxAPExtra; }
-
-        // 力量
-        public int Strength { get => this.mStrength + this.mStrengthExtra; }
-
-        // 智力
-        public int Intelligence { get => this.mIntelligence + this.mIntelligenceExtra; }
-
-        // 敏捷
-        public int Dexterity { get => this.mDexterity + this.mDexterityExtra; }
-
         // 延时回复计算
-        public void DeferHeal(string series, int value) {
+        public void HealDefer(string series, int value) {
             int prevValue = 0;
             bool hasValue = this.mHeals.TryGetValue(series, out prevValue);
             int curValue = Math.Max(prevValue + value, 0);
@@ -85,7 +119,7 @@ namespace Hathor
             }
         }
 
-        public void DeferHealUp(string series, float value) {
+        public void HealDeferAmplify(string series, float value) {
             int prevValue = 0;
             bool hasValue = this.mHeals.TryGetValue(series, out prevValue);
             int curValue = Math.Max((int)((float)prevValue * value), 0);
@@ -95,7 +129,7 @@ namespace Hathor
         }
 
         // 延时伤害计算
-        public void DeferDamage(string series, int value) {
+        public void DamageDefer(string series, int value) {
             int prevValue = 0;
             bool hasValue = this.mDamages.TryGetValue(series, out prevValue);
             int curValue = Math.Max(prevValue + value, 0);
@@ -104,7 +138,7 @@ namespace Hathor
             }
         }
         
-        public void DeferDamageUp(string series, float value) {
+        public void DamageDeferAmplify(string series, float value) {
             int prevValue = 0;
             bool hasValue = this.mDamages.TryGetValue(series, out prevValue);
             int curValue = Math.Max((int)((float)prevValue * value), 0);
@@ -113,7 +147,7 @@ namespace Hathor
             }
         }
 
-        public void FlushDamage() {
+        public void DamageFlush() {
             // 更新血量 -------------------------------------
             var HPDelta = this.UpdateHeal() - this.UpdateDamage();
             if (this.mHP >= this.MaxHP) {

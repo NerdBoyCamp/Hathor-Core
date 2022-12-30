@@ -18,7 +18,7 @@ namespace Hathor
         ICharacter Create();
     }
 
-    public interface ICharacterGrowth
+    public interface ICharacterUpgrade
     {
         // 经验值
         int EXP { get; }
@@ -40,87 +40,6 @@ namespace Hathor
 
         // 增加/消耗总点数
         bool IncreaseUsedPoints(int point);
-    }
-
-    // 角色受到影响的效果（技能效果/抗性/buff/debuff）
-    public interface ICharacterEffects
-    {
-        // 添加效果
-        IEffect AddEffect(IEffect effect);
-
-        // 删除效果
-        IEffect RemoveEffect(string effectID);
-
-        // 获取所有效果(按照优先级降序排列)
-        IEffect[] ListEffects();
-
-        // 更新角色身上效果
-        void Update();
-    }
-
-    // 角色能力/技能
-    public interface ICharacterAbilities
-    {
-        // 添加能力
-        IEffectClass AddAbility(IEffectClass effectClass);
-
-        // 删除能力
-        IEffectClass RemoveAbility(string effectClassID);
-
-        // 查找能力
-        IEffectClass GetAbility(string effectClassID);
-
-        // 获取所有能力
-        IEffectClass[] ListAbilities();
-    }
-
-    // 角色装备
-    public interface ICharacterEquipments
-    {
-        // 头
-        IItem Head { get; }
-
-        // 右手
-        IItem RightHand { get; }
-
-        // 左手
-        IItem LeftHand { get; }
-
-        // 胸
-        IItem Chest { get; }
-
-        // 腰
-        IItem Waist { get; }
-
-        // 脚
-        IItem Feet { get; }
-
-        // 装备物品，返回之前的物品
-        IItem EquipHead(IItem item);
-
-        // 装备，返回之前的装备
-        IItem EquipRightHand(IItem item);
-
-        // 装备，返回之前的装备
-        IItem EquipLeftHand(IItem item);
-
-        // 装备，返回之前的装备
-        IItem EquipChest(IItem item);
-
-        // 装备，返回之前的装备
-        IItem EquipWaist(IItem item);
-
-        // 装备，返回之前的装备
-        IItem EquipFeet(IItem item);
-
-        // // 装备饰品
-        // IItem EquipOrnament(IItem item);
-
-        // // 卸下饰品
-        // IItem RemoveOrnament(string itemID);
-
-        // // 获取所有装饰品
-        // IItem[] ListOrnaments();
     }
 
     // 角色包裹
@@ -176,19 +95,19 @@ namespace Hathor
         ICharacterBattle GetBattle();
 
         // 当前角色成长
-        ICharacterGrowth GetGrowth();
-
-        // 当前角色受到影响的效果（技能效果/抗性/buff/debuff）
-        ICharacterEffects GetEffects();
-
-        // 当前角色能力/技能
-        ICharacterAbilities GetAbilities();
+        ICharacterUpgrade GetUpgrade();
 
         // 当前角色装备
         ICharacterEquipments GetEquipments();
 
         // 当前角色的背包
         ICharacterStores GetStores();
+
+        // 当前角色受到影响的效果（技能效果/抗性/buff/debuff）
+        IEffects GetEffects();
+
+        // 当前角色能力/技能
+        IEffectAbilities GetAbilities();
 
         // 触发角色变化的事件
         void Publish(IEvent ev);

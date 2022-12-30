@@ -2,7 +2,8 @@ using System;
 
 namespace Hathor
 {
-    class DefaultCharacterStore : ICharacterStore {
+    class DefaultCharacterStore : ICharacterStore
+    {
         // 角色
         protected ICharacter mChar;
 
@@ -22,7 +23,8 @@ namespace Hathor
         public int Capacity { get => this.mCapacity; }
 
         // 构造
-        public DefaultCharacterStore(ICharacter character, string name, int capacity) {
+        public DefaultCharacterStore(ICharacter character, string name, int capacity)
+        {
             this.mChar = character;
             this.mName = name;
             this.mCapacity = capacity;
@@ -30,24 +32,29 @@ namespace Hathor
         }
 
         // 增加/减少包裹容量
-        public bool ExtendCapacity(int slotCount) {
-            if (slotCount == 0) {
+        public bool ExtendCapacity(int slotCount)
+        {
+            if (slotCount == 0)
+            {
                 return true;
             }
 
             int newCapacity = this.mCapacity + slotCount;
-            if (newCapacity < 0) {
+            if (newCapacity < 0)
+            {
                 return false;
             }
 
-            if (newCapacity == this.mCapacity) {
+            if (newCapacity == this.mCapacity)
+            {
                 // 没有变动
                 return true;
             }
 
             if (slotCount < 0) {
                 // 缩小背包
-                for (int i = newCapacity; i < this.mCapacity; i++) {
+                for (int i = newCapacity; i < this.mCapacity; i++)
+                {
                     // 检查是否有空间缩小背包
                     if (this.mSlots[i] != null) {
                         return false;
@@ -68,14 +75,18 @@ namespace Hathor
         }
 
         // 交换位置
-        public bool SwapItem(int slot1, int slot2) {
-            if (slot1 <=0 || slot1 >= this.mCapacity) {
+        public bool SwapItem(int slot1, int slot2)
+        {
+            if (slot1 <=0 || slot1 >= this.mCapacity)
+            {
                 return false;
             }
-            if (slot2 <=0 || slot2 >= this.mCapacity) {
+            if (slot2 <=0 || slot2 >= this.mCapacity)
+            {
                 return false;
             }
-            if (slot1 == slot2) {
+            if (slot1 == slot2)
+            {
                 return true;
             }
             IItem item = this.mSlots[slot1];
@@ -85,18 +96,24 @@ namespace Hathor
         }
 
         // 保存物品
-        public IItem StoreItem(int slot, IItem item) {
-            if (slot <=0 || slot >= this.mCapacity) {
+        public IItem StoreItem(int slot, IItem item)
+        {
+            if (slot <=0 || slot >= this.mCapacity)
+            {
                 return null;
             }
-            if (this.mSlots[slot] != null) {
+
+            if (this.mSlots[slot] != null)
+            {
                 // 位置上已经有物品了
                 return null;
             }
 
             // 查看是否物品已经在背包里了
-            foreach (IItem i in this.mSlots) {
-                if (i != null && i.ID == item.ID) {
+            foreach (IItem i in this.mSlots)
+            {
+                if (i != null && i.ID == item.ID)
+                {
                     return null;
                 }
             }
@@ -105,8 +122,10 @@ namespace Hathor
         }
 
         // 丢弃物品
-        public IItem DropItem(int slot) {
-            if (slot <=0 || slot >= this.mCapacity) {
+        public IItem DropItem(int slot)
+        {
+            if (slot <=0 || slot >= this.mCapacity)
+            {
                 return null;
             }
 
@@ -116,8 +135,10 @@ namespace Hathor
         }
 
         // 查看物品
-        public IItem GetItem(int slot) {
-            if (slot <=0 || slot >= this.mCapacity) {
+        public IItem GetItem(int slot)
+        {
+            if (slot <=0 || slot >= this.mCapacity)
+            {
                 return null;
             }
             return this.mSlots[slot];

@@ -1,3 +1,5 @@
+using System;
+
 namespace Hathor
 {
     class HealEffectClass : IEffectClass
@@ -8,18 +10,24 @@ namespace Hathor
 
         protected int mHealAmount; // 回复的HP
 
-        protected float mHealSeconds; // 在多少时间内回复
+        protected double mHealSeconds; // 在多少时间内回复
+
+        protected double mHealAmountPerSec; // 平均每秒回复HP
 
         public HealEffectClass(
             string id,
             string series,
             int healAmount,
-            float healSeconds
+            double healSeconds
         ) {
             this.mID = id;
             this.mSeries = series;
             this.mHealAmount = healAmount;
             this.mHealSeconds = healSeconds;
+            this.mHealAmountPerSec = 
+                this.mHealSeconds == 0 ?
+                (double)this.mHealAmount :
+                (double)this.mHealAmount / this.mHealSeconds;
         }
 
         public string ID { get => this.mID; }
@@ -41,6 +49,9 @@ namespace Hathor
 
         // 对自己施放
         public bool IsSelf { get => false; }
+
+        // 不会重复影响（效果不会叠加）
+        public bool IsExclusive { get => false; }
 
         // 是否可影响建筑
         public bool IsAppliableOnBuilding { get => false; }
@@ -76,14 +87,16 @@ namespace Hathor
 
             protected string mID;
 
-            protected int mHealAmount; // 剩下要回复的HP
+            protected int mHealAmount; // 已经回复的HP
 
-            protected float mHealLastTime; // 上一次回复的时间
+            protected double mHealStartSeconds; // 开始回复的时间(秒)
 
             public HealEffect(HealEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
+                this.mHealAmount = 0;
+                this.mHealStartSeconds = DateTime.UtcNow.Ticks / 10000000.0;
             }
 
             public string ID { get => this.mID; }
@@ -92,7 +105,7 @@ namespace Hathor
             public string Desctiption { get => ""; }
 
             // 是否效果结束
-            public bool IsFinished { get => this.mHealAmount <= 0; }
+            public bool IsFinished { get => this.mHealAmount >= this.mCls.mHealAmount; }
 
             // 对应的效果类（角色能力/道具能力）
             public IEffectClass GetClass() { return this.mCls; }
@@ -106,12 +119,30 @@ namespace Hathor
                 var battle = character.GetBattle();
                 if (battle == null)
                 {
-                    this.mHealAmount = 0;
+                    this.mHealAmount = this.mCls.mHealAmount;
+                    return;
                 }
-                else
-                {
-                    // battle.DeferHeal(this.mCls.Series, this.mDefence);
+
+                if (this.mCls.mHealSeconds == 0) {
+                    this.mHealAmount = this.mCls.mHealAmount;
+                    battle.HealDefer(this.mCls.Series, this.mHealAmount);
+                    return;
                 }
+
+                double healCurSeconds = DateTime.UtcNow.Ticks / 10000000.0;
+                int healAmount = (int)(this.mCls.mHealAmountPerSec *
+                    (healCurSeconds - this.mHealStartSeconds));
+                if (healAmount > this.mCls.mHealAmount) {
+                    // 不能超过总回复HP
+                    healAmount = this.mCls.mHealAmount;
+                }
+                int healAmountDelta = healAmount - this.mHealAmount;
+                if (healAmountDelta == 0) {
+                    return;
+                }
+
+                battle.HealDefer(this.mCls.Series, healAmountDelta);
+                this.mHealAmount = healAmount;
             }
 
             // 对物品产生效果

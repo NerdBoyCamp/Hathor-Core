@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Hathor;
 
 namespace Hathor
@@ -20,7 +21,10 @@ namespace Hathor
             // Console.WriteLine(a.TryGetValue("b", out c));
             // Console.WriteLine(b);
             // Console.WriteLine(c);
-            Console.WriteLine(Util.RamdonID());
+            // Console.WriteLine(Util.RamdonID());
+            Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
+            Thread.Sleep(1000);
+            Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
         }
     }
 }

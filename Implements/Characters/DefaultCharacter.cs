@@ -2,7 +2,7 @@ using System;
 
 namespace Hathor
 {
-    class Player : ICharacter
+    class DefaultCharacter : ICharacter
     {
         // 所属类别
         protected ICharacterClass mCls;
@@ -23,13 +23,13 @@ namespace Hathor
         public ICharacterBattle mBattle = null;
 
         // 角色成长
-        public ICharacterGrowth mGrowth = null;
+        public ICharacterUpgrade mGrowth = null;
 
         // 角色身上效果
-        public ICharacterEffects mEffects = null;
+        public IEffects mEffects = null;
 
         // 角色能力
-        public ICharacterAbilities mAbilities = null;
+        public IEffectAbilities mAbilities = null;
 
         // 角色装备
         public ICharacterEquipments mEquipments = null;
@@ -45,7 +45,7 @@ namespace Hathor
         public string Name { get => mName; set => mName = value; }
 
         // 构造
-        public Player(ICharacterClass Cls, string ID) {
+        public DefaultCharacter(ICharacterClass Cls, string ID) {
             this.mCls = Cls;
             this.mID = ID;
         }
@@ -60,13 +60,13 @@ namespace Hathor
         public ICharacterBattle GetBattle() { return this.mBattle; }
 
         // 当前角色成长
-        public ICharacterGrowth GetGrowth() { return this.mGrowth; }
+        public ICharacterUpgrade GetUpgrade() { return this.mGrowth; }
 
         // 当前角色受到影响的效果（技能效果/抗性/buff/debuff）
-        public ICharacterEffects GetEffects() { return this.mEffects; }
+        public IEffects GetEffects() { return this.mEffects; }
 
         // 当前角色能力/技能
-        public ICharacterAbilities GetAbilities() { return this.mAbilities; }
+        public IEffectAbilities GetAbilities() { return this.mAbilities; }
 
         // 当前角色装备
         public ICharacterEquipments GetEquipments() { return this.mEquipments; }
@@ -92,7 +92,7 @@ namespace Hathor
             }
 
             if (this.mBattle != null) {
-                this.mBattle.FlushDamage();
+                this.mBattle.DamageFlush();
             }
         }
     }

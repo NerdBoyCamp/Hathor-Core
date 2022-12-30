@@ -1,28 +1,26 @@
+using System.Collections.Generic;
+
 namespace Hathor
 {
-    class DefenceEffectClass : IEffectClass
+    class PromoteEffectClass : IEffectClass
     {
         protected string mID;
 
-        protected string mSeries;
+        protected Dictionary<string, int> mAttributes;
 
-        protected int mDefence;
-
-        public DefenceEffectClass(
+        public PromoteEffectClass(
             string id,
-            string series,
-            int defence
+            Dictionary<string, int> attrs
         )
         {
             this.mID = id;
-            this.mSeries = series;
-            this.mDefence = defence;
+            this.mAttributes = new Dictionary<string, int>(attrs);
         }
 
         public string ID { get => this.mID; }
 
         // 系列（物理/电/辐射/迷信/其他...）
-        public string Series { get => this.mSeries; }
+        public string Series { get => ""; }
 
         // 名字
         public string Name { get => ""; }
@@ -31,16 +29,16 @@ namespace Hathor
         public string Desctiption { get => ""; }
 
         // 优先级
-        public int Priority { get => 0; }
+        public int Priority { get => 100; }
 
         // 自动施放
-        public bool IsAuto { get => true; }
+        public bool IsAuto { get => false; }
 
         // 对自己施放
-        public bool IsSelf { get => true; }
+        public bool IsSelf { get => false; }
 
         // 不会重复影响（效果不会叠加）
-        public bool IsExclusive { get => false; }
+        public bool IsExclusive { get => true; }
 
         // 是否可影响建筑
         public bool IsAppliableOnBuilding { get => false; }
@@ -54,33 +52,29 @@ namespace Hathor
         // 通过建筑生成
         public IEffect CreateByBuilding(IBuilding building)
         {
-            return null;
+            return new PromoteEffect(this, Util.RamdonID());
         }
 
         // 通过角色生成
         public IEffect CreateByCharacter(ICharacter character)
         {
-            var battle = character.GetBattle();
-            if (battle == null) {
-                return null;
-            }
-
-            return new DefenceEffect(this, Util.RamdonID());
+            return new PromoteEffect(this, Util.RamdonID());
         }
 
         // 通过物品生成
         public IEffect CreateByItem(IItem item)
         {
-            return null;
+            return new PromoteEffect(this, Util.RamdonID());
         }
 
-        class DefenceEffect : IEffect
+
+        class PromoteEffect : IEffect
         {
-            protected DefenceEffectClass mCls;
+            protected PromoteEffectClass mCls;
 
             protected string mID;
 
-            public DefenceEffect(DefenceEffectClass cls, string id)
+            public PromoteEffect(PromoteEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
@@ -92,7 +86,7 @@ namespace Hathor
             public string Desctiption { get => ""; }
 
             // 是否效果结束
-            public bool IsFinished { get => false; }
+            public bool IsFinished { get => true; }
 
             // 对应的效果类（角色能力/道具能力）
             public IEffectClass GetClass() { return this.mCls; }
@@ -104,9 +98,13 @@ namespace Hathor
             public void ApplyOnCharacter(ICharacter character)
             {
                 var battle = character.GetBattle();
-                if (battle != null)
+                if (battle == null)
                 {
-                    battle.DamageDefer(this.mCls.Series, -this.mCls.mDefence);
+                    return;
+                }
+
+                foreach(var attr in this.mCls.mAttributes) {
+                    battle.Promote(attr.Key, this.ID, attr.Value);
                 }
             }
 

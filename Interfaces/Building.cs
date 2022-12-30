@@ -11,7 +11,7 @@ namespace Hathor
         IBuilding Create();
     }
 
-    public interface IBuildingGrowth
+    public interface IBuildingUpgrade
     {
         // 等级
         int LV { get; }
@@ -31,6 +31,6 @@ namespace Hathor
         IBuildingClass GetClass();
 
         // 当前建筑成长
-        IBuildingGrowth GetGrowth();
+        IBuildingUpgrade GetUpgrade();
     }
 }

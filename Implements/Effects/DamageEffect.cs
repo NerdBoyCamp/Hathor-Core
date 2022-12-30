@@ -44,6 +44,9 @@ namespace Hathor
         // 对自己施放
         public bool IsSelf { get => false; }
 
+        // 不会重复影响（效果不会叠加）
+        public bool IsExclusive { get => false; }
+
         // 是否可影响建筑
         public bool IsAppliableOnBuilding { get => false; }
 
@@ -76,7 +79,31 @@ namespace Hathor
         // 通过物品生成
         public IEffect CreateByItem(IItem item)
         {
-            return null;
+            if (item.IsUsedUp)
+            {
+                // 使用完的的道具
+                return null;
+            }
+
+            var battle = item.GetBattle();
+            if (battle == null)
+            {
+                return null;
+            }
+
+            // 计算发挥度
+            var perf = battle.GetUserPerformance();
+            if (perf <= 0)
+            {
+                return null;
+            }
+
+            var damage = Util.RandomInt(this.mMinDamage, this.mMaxDamage);
+
+            return new DamageEffect(
+                this,
+                Util.RamdonID(), 
+                (int)((float)damage * perf));
         }
 
         class DamageEffect : IEffect
@@ -116,7 +143,7 @@ namespace Hathor
                 var battle = character.GetBattle();
                 if (battle != null)
                 {
-                    battle.DeferDamage(this.mCls.Series, this.mDamage);
+                    battle.DamageDefer(this.mCls.Series, this.mDamage);
                 }
                 this.mIsFinished = true;
             }

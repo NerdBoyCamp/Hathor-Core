@@ -22,6 +22,9 @@ namespace Hathor
         // 对自己施放
         bool IsSelf { get; }
 
+        // 不会重复影响（效果不会叠加）
+        bool IsExclusive { get; }
+
         // 是否可影响建筑
         bool IsAppliableOnBuilding { get; }
 
