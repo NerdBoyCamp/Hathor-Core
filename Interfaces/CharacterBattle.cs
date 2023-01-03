@@ -2,63 +2,59 @@ using System;
 
 namespace Hathor
 {
+    public interface ICharacterBattleHP
+    {
+        // 血量值
+        int Value { get; }
+
+        // 伤害计算
+        ICharacterAttribute GetDamageBuffer(string series);
+
+        // 回复计算
+        ICharacterAttribute GetHealingBuffer(string series);
+
+        // 结算伤害/回复
+        void Update();
+    }
+    
     // 战斗相关
     public interface ICharacterBattle
     {
         // ---------------------------------------------------
-        // 最大血量
-        int MaxHP { get; }
-
-        // 最大怒气
-        int MaxAP { get; }
-
-        // 力量
-        int Strength { get; }
-
-        // 智力
-        int Intelligence { get; }
-
-        // 敏捷
-        int Dexterity { get; }
-
-        // 获取额外属性值
-        int GetAttrValue(string attr);
-
-        // 降低属性
-        void Demote(string attr, string id, int value);
-
-        // 降低属性的增幅
-        void DemoteAmplify(string attr, string id, float value);
-
-        // 提升属性
-        void Promote(string attr, string id, int value);
-
-        // 提升属性的增幅
-        void PromoteAmplify(string attr, string id, float value);
-
-        // 消除所有提升和降低
-        void PromoteClear(string id);
-
-        // --------------------------------------------------
         // 血量
         int HP { get; }
 
         // 怒气
         int AP { get; }
 
-        // 延时回复计算
-        void HealDefer(string series, int value);
+        // 伤害计算
+        ICharacterAttribute GetDamageBuffer(string series);
 
-        // 延时增益回复计算
-        void HealDeferAmplify(string series, float value);
+        // 回复计算
+        ICharacterAttribute GetHealingBuffer(string series);
 
-        // 延时伤害计算
-        void DamageDefer(string series, int value);
+        // 最大血量
+        ICharacterAttributeEx MaxHP { get; }
 
-        // 延时增益伤害计算
-        void DamageDeferAmplify(string series, float value);
+        // 最大怒气
+        ICharacterAttributeEx MaxAP { get; }
 
-        // 结算伤害/回复
-        void DamageFlush();
+        // 力量
+        ICharacterAttributeEx Strength { get; }
+
+        // 智力
+        ICharacterAttributeEx Intelligence { get; }
+
+        // 敏捷
+        ICharacterAttributeEx Dexterity { get; }
+
+        // 获取额外属性值
+        ICharacterAttributeEx GetAttribute(string attrName);
+
+        // 
+        void Reset();
+
+        // 更新属性
+        void Update();
     }
 }

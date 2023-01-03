@@ -67,6 +67,9 @@ namespace Hathor
 
         // 查看物品
         IItem GetItem(int slot);
+
+        // 查找物品
+        int FindItem(string itemID);
     }
 
     public interface ICharacterStores

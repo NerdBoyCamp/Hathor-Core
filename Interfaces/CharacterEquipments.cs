@@ -27,13 +27,10 @@ namespace Hathor
         // 装备物品
         IItem EquipItem(string slot, IItem item);
 
-        // // 装备饰品
-        // IItem EquipOrnament(IItem item);
+        // 卸下物品
+        IItem RemoveItem(string slot);
 
-        // // 卸下饰品
-        // IItem RemoveOrnament(string itemID);
-
-        // // 获取所有装饰品
-        // IItem[] ListOrnaments();
+        // 更新所有装备状态/每帧调用
+        void Update();
     }
 }

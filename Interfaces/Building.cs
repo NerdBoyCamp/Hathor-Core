@@ -32,5 +32,8 @@ namespace Hathor
 
         // 当前建筑成长
         IBuildingUpgrade GetUpgrade();
+
+        // 当前建筑更新
+        void Update();
     }
 }

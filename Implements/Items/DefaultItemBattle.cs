@@ -92,7 +92,8 @@ namespace Hathor
             {
                 // remove promotions
                 var battle = this.mUser.GetBattle();
-                if (battle != null) {
+                if (battle != null)
+                {
                     battle.PromoteClear(this.mItem.ID);
                 }
             }
@@ -101,8 +102,9 @@ namespace Hathor
             {
                 // add promotions
                 var battle = user.GetBattle();
-                if (battle != null) {
-                    foreach(var attr in this.mPromotions)
+                if (battle != null)
+                {
+                    foreach (var attr in this.mPromotions)
                     {
                         battle.Promote(attr.Key, this.mItem.ID, attr.Value);
                     }

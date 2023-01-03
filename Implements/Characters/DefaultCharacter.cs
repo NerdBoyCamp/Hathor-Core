@@ -45,7 +45,8 @@ namespace Hathor
         public string Name { get => mName; set => mName = value; }
 
         // 构造
-        public DefaultCharacter(ICharacterClass Cls, string ID) {
+        public DefaultCharacter(ICharacterClass Cls, string ID)
+        {
             this.mCls = Cls;
             this.mID = ID;
         }
@@ -74,8 +75,10 @@ namespace Hathor
         // 当前角色的背包
         public ICharacterStores GetStores() { return this.mStores; }
 
-        public void Publish(IEvent ev) {
-            if (this.mListener != null) {
+        public void Publish(IEvent ev)
+        {
+            if (this.mListener != null)
+            {
                 this.mListener.OnNotify(ev);
             }
         }
@@ -86,13 +89,21 @@ namespace Hathor
         }
 
         // 更新角色/每帧调用
-        public void Update() { 
-            if (this.mEffects != null) {
+        public void Update()
+        {
+            if (this.mEffects != null)
+            {
                 this.mEffects.Update();
             }
 
-            if (this.mBattle != null) {
-                this.mBattle.DamageFlush();
+            if (this.mEquipments != null)
+            {
+                this.mEquipments.Update();
+            }
+
+            if (this.mBattle != null)
+            {
+                this.mBattle.Update();
             }
         }
     }

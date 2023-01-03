@@ -6,6 +6,8 @@ namespace Hathor
 
         protected string mID;
 
+        protected IEventListener mListener = null;
+
         public IItemBattle mBattle = null;
 
         public IEffects mEffects = null;
@@ -41,5 +43,27 @@ namespace Hathor
 
         // 当前道具拥有的可触发效果（能力/技能）
         public IEffectAbilities GetAbilities() { return this.mAbilities; }
+
+        public void Publish(IEvent ev)
+        {
+            if (this.mListener != null)
+            {
+                this.mListener.OnNotify(ev);
+            }
+        }
+
+        public void Subscribe(IEventListener listener)
+        {
+            this.mListener = listener;
+        }
+
+        // 更新物品/每帧调用
+        public void Update()
+        {
+            if (this.mEffects != null)
+            {
+                this.mEffects.Update();
+            }
+        }
     }
 }

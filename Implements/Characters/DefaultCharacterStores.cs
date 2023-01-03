@@ -51,19 +51,23 @@ namespace Hathor
                 return true;
             }
 
-            if (slotCount < 0) {
+            if (slotCount < 0)
+            {
                 // 缩小背包
                 for (int i = newCapacity; i < this.mCapacity; i++)
                 {
                     // 检查是否有空间缩小背包
-                    if (this.mSlots[i] != null) {
+                    if (this.mSlots[i] != null)
+                    {
                         return false;
                     }
                 }
                 this.mCapacity = newCapacity;
                 return true;
 
-            } else {
+            }
+            else
+            {
                 // 扩大背包
                 IItem[] newSlots = new IItem[newCapacity];
                 Array.Copy(this.mSlots, 0, newSlots, 0, this.Capacity);
@@ -77,11 +81,11 @@ namespace Hathor
         // 交换位置
         public bool SwapItem(int slot1, int slot2)
         {
-            if (slot1 <=0 || slot1 >= this.mCapacity)
+            if (slot1 <= 0 || slot1 >= this.mCapacity)
             {
                 return false;
             }
-            if (slot2 <=0 || slot2 >= this.mCapacity)
+            if (slot2 <= 0 || slot2 >= this.mCapacity)
             {
                 return false;
             }
@@ -98,7 +102,7 @@ namespace Hathor
         // 保存物品
         public IItem StoreItem(int slot, IItem item)
         {
-            if (slot <=0 || slot >= this.mCapacity)
+            if (slot <= 0 || slot >= this.mCapacity)
             {
                 return null;
             }
@@ -124,7 +128,7 @@ namespace Hathor
         // 丢弃物品
         public IItem DropItem(int slot)
         {
-            if (slot <=0 || slot >= this.mCapacity)
+            if (slot <= 0 || slot >= this.mCapacity)
             {
                 return null;
             }
@@ -137,7 +141,7 @@ namespace Hathor
         // 查看物品
         public IItem GetItem(int slot)
         {
-            if (slot <=0 || slot >= this.mCapacity)
+            if (slot <= 0 || slot >= this.mCapacity)
             {
                 return null;
             }

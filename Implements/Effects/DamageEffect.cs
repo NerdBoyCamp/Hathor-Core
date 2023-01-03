@@ -17,7 +17,8 @@ namespace Hathor
             string series,
             int maxDamage,
             int minDamage
-        ) {
+        )
+        {
             this.mID = id;
             this.mSeries = series;
             this.mMaxDamage = Math.Max(maxDamage, minDamage);
@@ -66,7 +67,8 @@ namespace Hathor
         public IEffect CreateByCharacter(ICharacter character)
         {
             var battle = character.GetBattle();
-            if (battle == null) {
+            if (battle == null)
+            {
                 return null;
             }
 
@@ -102,7 +104,7 @@ namespace Hathor
 
             return new DamageEffect(
                 this,
-                Util.RamdonID(), 
+                Util.RamdonID(),
                 (int)((float)damage * perf));
         }
 
@@ -135,7 +137,7 @@ namespace Hathor
             public IEffectClass GetClass() { return this.mCls; }
 
             // 对建筑产生效果
-            public void ApplyOnBuilding(IBuilding building) {}
+            public void ApplyOnBuilding(IBuilding building) { }
 
             // 对角色产生效果
             public void ApplyOnCharacter(ICharacter character)
@@ -143,13 +145,13 @@ namespace Hathor
                 var battle = character.GetBattle();
                 if (battle != null)
                 {
-                    battle.DamageDefer(this.mCls.Series, this.mDamage);
+                    battle.GetDamageBuffer(this.mCls.Series).Increase(this.mDamage);
                 }
                 this.mIsFinished = true;
             }
 
             // 对物品产生效果
-            public void ApplyOnItem(IItem item) {}
+            public void ApplyOnItem(IItem item) { }
         }
 
     }

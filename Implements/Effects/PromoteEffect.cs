@@ -92,7 +92,7 @@ namespace Hathor
             public IEffectClass GetClass() { return this.mCls; }
 
             // 对建筑产生效果
-            public void ApplyOnBuilding(IBuilding building) {}
+            public void ApplyOnBuilding(IBuilding building) { }
 
             // 对角色产生效果
             public void ApplyOnCharacter(ICharacter character)
@@ -103,13 +103,15 @@ namespace Hathor
                     return;
                 }
 
-                foreach(var attr in this.mCls.mAttributes) {
+                foreach (var attr in this.mCls.mAttributes)
+                {
+                    battle.GetAttribute(attr.Key).
                     battle.Promote(attr.Key, this.ID, attr.Value);
                 }
             }
 
             // 对物品产生效果
-            public void ApplyOnItem(IItem item) {}
+            public void ApplyOnItem(IItem item) { }
         }
     }
 }

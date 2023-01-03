@@ -22,12 +22,12 @@ namespace Hathor
         {
             this.mChar = character;
             this.mSlots = new Dictionary<string, ItemSlot>();
-            this.mSlots["Head"] = new ItemSlot{item = null, series = "Helmet"};
-            this.mSlots["RightHand"] = new ItemSlot{item = null, series = "Weapon"};
-            this.mSlots["LeftHand"] = new ItemSlot{item = null, series = "Weapon"};
-            this.mSlots["Chest"] = new ItemSlot{item = null, series = "Armor"};
-            this.mSlots["Waist"] = new ItemSlot{item = null, series = "Belt"};
-            this.mSlots["Feet"] = new ItemSlot{item = null, series = "Shoes"};
+            this.mSlots["Head"] = new ItemSlot { item = null, series = "Helmet" };
+            this.mSlots["RightHand"] = new ItemSlot { item = null, series = "Weapon" };
+            this.mSlots["LeftHand"] = new ItemSlot { item = null, series = "Weapon" };
+            this.mSlots["Chest"] = new ItemSlot { item = null, series = "Armor" };
+            this.mSlots["Waist"] = new ItemSlot { item = null, series = "Belt" };
+            this.mSlots["Feet"] = new ItemSlot { item = null, series = "Shoes" };
         }
 
         // 头
@@ -67,7 +67,8 @@ namespace Hathor
             }
 
             IItem itemPrev = itemSlot.item;
-            if (item == itemPrev) {
+            if (item == itemPrev)
+            {
                 return null;
             }
 
@@ -101,6 +102,22 @@ namespace Hathor
 
             itemSlot.item = item;
             return item;
+        }
+
+        public IItem RemoveItem(string slot)
+        {
+            return this.EquipItem(slot, null);
+        }
+
+        public void Update()
+        {
+            foreach (var slot in mSlots.Values)
+            {
+                if (slot.item != null)
+                {
+                    slot.item.Update();
+                }
+            }
         }
     }
 }

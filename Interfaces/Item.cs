@@ -13,9 +13,6 @@ namespace Hathor
         // 类别 头盔/武器/胸甲/鞋子/腰带/回复道具/...
         string Series { get; }
 
-        // // 标签
-        // string[] Tags { get; }
-
         // 创建
         IItem Create();
     }
@@ -44,5 +41,14 @@ namespace Hathor
 
         // 当前道具拥有的可触发效果（能力/技能）
         IEffectAbilities GetAbilities();
+
+        // 触发物品变化的事件
+        void Publish(IEvent ev);
+
+        // 订阅物品变化的事件/设置监听者
+        void Subscribe(IEventListener listener);
+
+        // 更新物品/每帧调用
+        void Update();
     }
 }
