@@ -8,27 +8,27 @@ namespace Hathor
         // ---------------------------------------------------
         // 血量
         ICharacterHealth HP { get; }
-
+        
         // 怒气
         ICharacterAnger AP { get; }
 
         // 最大血量
-        ICharacterAttribute MaxHP { get; }
+        IAttribute MaxHP { get; }
 
         // 最大怒气
-        ICharacterAttribute MaxAP { get; }
+        IAttribute MaxAP { get; }
 
         // 力量
-        ICharacterAttribute Strength { get; }
+        IAttribute Strength { get; }
 
         // 智力
-        ICharacterAttribute Intelligence { get; }
+        IAttribute Intelligence { get; }
 
         // 敏捷
-        ICharacterAttribute Dexterity { get; }
+        IAttribute Dexterity { get; }
 
         // 获取额外属性值
-        ICharacterAttribute GetAttribute(string attrName);
+        IAttribute GetAttribute(string attrName);
 
         // 更新属性
         void Update();

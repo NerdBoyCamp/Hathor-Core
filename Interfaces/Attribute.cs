@@ -1,9 +1,9 @@
 namespace Hathor
 {
-    public interface ICharacterAttributeChange
+    public interface IAttributeChange
     {
         // 源属性
-        ICharacterAttribute Source { get; }
+        IAttribute Source { get; }
 
         // 增益后数值
         int Value { get; }
@@ -18,7 +18,7 @@ namespace Hathor
         void Dispel();
     }
 
-    public interface ICharacterAttribute
+    public interface IAttribute
     {
         // 属性数值
         int Value { get; }
@@ -27,12 +27,12 @@ namespace Hathor
         int OriginValue { get; set; }
 
         // 提升属性
-        ICharacterAttributeChange Increase(int value);
+        IAttributeChange Increase(int value);
 
         // 扩大属性
-        ICharacterAttributeChange Expand(float value);
+        IAttributeChange Expand(float value);
 
         // 扩大提升的属性
-        ICharacterAttributeChange ExpendIncrease(float value);
+        IAttributeChange ExpendIncrease(float value);
     }
 }

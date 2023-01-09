@@ -2,6 +2,11 @@ using System.Collections.Generic;
 
 namespace Hathor
 {
+    class DefaultItemBattleAttributes : IItemBattleAttributes
+    {
+
+    }
+
     class DefaultItemBattle : IItemBattle
     {
         protected IItem mItem;
@@ -12,7 +17,7 @@ namespace Hathor
 
         protected Dictionary<string, int> mAttrPromoted = null;
 
-        protected Dictionary<string, ICharacterAttributeChange> mAttrChanged = null;
+        protected Dictionary<string, IAttributeChange> mAttrChanged = null;
 
         public DefaultItemBattle(
             IItem item,
@@ -23,7 +28,7 @@ namespace Hathor
             this.mItem = item;
             this.mAttrRequired = new Dictionary<string, int>(requirments);
             this.mAttrPromoted = new Dictionary<string, int>(promotions);
-            this.mAttrChanged = new Dictionary<string, ICharacterAttributeChange>();
+            this.mAttrChanged = new Dictionary<string, IAttributeChange>();
         }
 
         // 当前使用者

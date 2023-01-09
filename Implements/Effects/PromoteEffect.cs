@@ -72,13 +72,13 @@ namespace Hathor
         {
             protected PromoteEffectClass mCls;
             protected string mID;
-            protected Dictionary<string, ICharacterAttributeChange> mAttributesChanges;
+            protected Dictionary<string, IAttributeChange> mAttributesChanges;
 
             public PromoteEffect(PromoteEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
-                this.mAttributesChanges = new Dictionary<string, ICharacterAttributeChange>();
+                this.mAttributesChanges = new Dictionary<string, IAttributeChange>();
             }
 
             public string ID { get => this.mID; }

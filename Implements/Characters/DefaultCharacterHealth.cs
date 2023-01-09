@@ -30,14 +30,14 @@ namespace Hathor
     class DefaultCharacterHealth : ICharacterHealth
     {
         protected ICharacter mChar;
-        protected ICharacterAttribute mMaxHP;
+        protected IAttribute mMaxHP;
         protected int mHP;
         protected Dictionary<string, ICharacterHealthBuffer> mHealingBuffers;
         protected Dictionary<string, ICharacterHealthBuffer> mDamageBuffers;
 
         public DefaultCharacterHealth(
             ICharacter character,
-            ICharacterAttribute maxHp,
+            IAttribute maxHp,
             int hp
         )
         {

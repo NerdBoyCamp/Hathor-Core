@@ -1,39 +1,33 @@
 namespace Hathor
 {
     // 物品装备推荐条件（决定发挥度）
-    public interface IItemBattle
+    public interface IItemBattleAttributes
     {
-        // 当前使用者
-        ICharacter User { get; }
-
         // 力量需求
-        int StrengthRequired { get; }
-
-        // 力量提升
-        int StrengthPromoted { get; }
+        IAttribute Strength { get; }
 
         // 智力需求
-        int IntelligenceRequired { get; }
-
-        // 智力提升
-        int IntelligencePromoted { get; }
+        IAttribute Intelligence { get; }
 
         // 敏捷需求
-        int DexterityRequired { get; }
-
-        // 敏捷提升
-        int DexterityPromoted { get; }
+        IAttribute Dexterity { get; }
 
         // 获取额外属性需求值
-        int GetAttrValueRequired(string attr);
+        IAttribute GetAttribute(string attrName);
+    }
 
-        // 获取额外属性提升值
-        int GetAttrValuePromoted(string attr);
+    public interface IItemBattle
+    {
+        // 属性需求
+        IItemBattleAttributes Requirments { get; }
 
+        // 属性的增益/减益
+        IItemBattleAttributes Changes { get; }
+
+        // 当前使用者
+        ICharacter User { get; set; }
+        
         // 当前使用角色的发挥度
         float GetUserPerformance();
-
-        // 设置当前使用者
-        bool SetUser(ICharacter character);
     }
 }

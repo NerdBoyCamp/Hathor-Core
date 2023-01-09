@@ -8,7 +8,7 @@ namespace Hathor
         protected ICharacter mChar;
         protected ICharacterHealth mHP;
         protected ICharacterAnger mAP;
-        protected Dictionary<string, ICharacterAttribute> mAttributes;
+        protected Dictionary<string, IAttribute> mAttributes;
 
         public DefaultCharacterBattle(
             ICharacter character,
@@ -18,11 +18,11 @@ namespace Hathor
         )
         {
             this.mChar = character;
-            this.mAttributes = new Dictionary<string, ICharacterAttribute>();
+            this.mAttributes = new Dictionary<string, IAttribute>();
             foreach (var attr in attributes)
             {
                 this.mAttributes.Add(
-                    attr.Key, new DefaultCharacterAttribute(attr.Value));
+                    attr.Key, new DefaultAttribute(attr.Value));
             }
             this.mHP = new DefaultCharacterHealth(this.mChar, this.MaxHP, hp);
             this.mAP = null;
@@ -35,24 +35,24 @@ namespace Hathor
         public ICharacterAnger AP { get => this.mAP; }
 
         // 最大血量
-        public ICharacterAttribute MaxHP { get => this.GetAttribute("MaxHP"); }
+        public IAttribute MaxHP { get => this.GetAttribute("MaxHP"); }
 
         // 最大怒气
-        public ICharacterAttribute MaxAP { get => this.GetAttribute("MaxAP"); }
+        public IAttribute MaxAP { get => this.GetAttribute("MaxAP"); }
 
         // 力量
-        public ICharacterAttribute Strength { get => this.GetAttribute("Str"); }
+        public IAttribute Strength { get => this.GetAttribute("Str"); }
 
         // 智力
-        public ICharacterAttribute Intelligence { get => this.GetAttribute("Int"); }
+        public IAttribute Intelligence { get => this.GetAttribute("Int"); }
 
         // 敏捷
-        public ICharacterAttribute Dexterity { get => this.GetAttribute("Dex"); }
+        public IAttribute Dexterity { get => this.GetAttribute("Dex"); }
 
         // 获取额外属性值
-        public ICharacterAttribute GetAttribute(string attrName)
+        public IAttribute GetAttribute(string attrName)
         {
-            ICharacterAttribute value = null;
+            IAttribute value = null;
             this.mAttributes.TryGetValue(attrName, out value);
             return value;
         }

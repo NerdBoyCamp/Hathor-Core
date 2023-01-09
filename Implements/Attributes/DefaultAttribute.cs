@@ -1,14 +1,14 @@
 namespace Hathor
 {
-    abstract class BaseCharacterAttributeChange : ICharacterAttributeChange
+    abstract class BaseAttributeChange : IAttributeChange
     {
-        protected DefaultCharacterAttribute mSource;
-        protected BaseCharacterAttributeChange mPrev;
-        protected BaseCharacterAttributeChange mNext;
+        protected DefaultAttribute mSource;
+        protected BaseAttributeChange mPrev;
+        protected BaseAttributeChange mNext;
 
-        public BaseCharacterAttributeChange(
-            DefaultCharacterAttribute source,
-            BaseCharacterAttributeChange prev
+        public BaseAttributeChange(
+            DefaultAttribute source,
+            BaseAttributeChange prev
         )
         {
             this.mSource = source;
@@ -18,7 +18,7 @@ namespace Hathor
 
         public abstract int GetValue();
 
-        public ICharacterAttribute Source { get => this.mSource; }
+        public IAttribute Source { get => this.mSource; }
 
         // 增益后数值
         public int Value { get => this.GetValue(); }
@@ -52,13 +52,13 @@ namespace Hathor
         }
     }
 
-    class IncreaseCharacterAttributeChange : BaseCharacterAttributeChange
+    class IncreaseAttributeChange : BaseAttributeChange
     {
         protected int mValue;
 
-        public IncreaseCharacterAttributeChange(
-            DefaultCharacterAttribute source,
-            BaseCharacterAttributeChange prev,
+        public IncreaseAttributeChange(
+            DefaultAttribute source,
+            BaseAttributeChange prev,
             int value
         ) : base(source, prev)
         {
@@ -71,13 +71,13 @@ namespace Hathor
         }
     }
 
-    class ExpandCharacterAttributeChange : BaseCharacterAttributeChange
+    class ExpandAttributeChange : BaseAttributeChange
     {
         protected float mValue;
 
-        public ExpandCharacterAttributeChange(
-            DefaultCharacterAttribute source,
-            BaseCharacterAttributeChange prev,
+        public ExpandAttributeChange(
+            DefaultAttribute source,
+            BaseAttributeChange prev,
             float value
         ) : base(source, prev)
         {
@@ -90,13 +90,13 @@ namespace Hathor
         }
     }
 
-    class ExpandIncreaseCharacterAttributeChange : BaseCharacterAttributeChange
+    class ExpandIncreaseAttributeChange : BaseAttributeChange
     {
         protected float mValue;
 
-        public ExpandIncreaseCharacterAttributeChange(
-            DefaultCharacterAttribute source,
-            BaseCharacterAttributeChange prev,
+        public ExpandIncreaseAttributeChange(
+            DefaultAttribute source,
+            BaseAttributeChange prev,
             float value
         ) : base(source, prev)
         {
@@ -111,14 +111,14 @@ namespace Hathor
         }
     }
 
-    class DefaultCharacterAttribute : ICharacterAttribute
+    class DefaultAttribute : IAttribute
     {
         public int mValue;
         public int mOriginValue;
         public bool mIsDirty = true;
-        public BaseCharacterAttributeChange mLatest = null;
+        public BaseAttributeChange mLatest = null;
 
-        public DefaultCharacterAttribute(int value)
+        public DefaultAttribute(int value)
         {
             this.mValue = value;
             this.mOriginValue = value;
@@ -160,9 +160,9 @@ namespace Hathor
         }
 
         // 提升属性
-        public ICharacterAttributeChange Increase(int value)
+        public IAttributeChange Increase(int value)
         {
-            var latest = new IncreaseCharacterAttributeChange(
+            var latest = new IncreaseAttributeChange(
                 this, this.mLatest, value
             );
             this.mLatest = latest;
@@ -170,9 +170,9 @@ namespace Hathor
         }
 
         // 扩大属性
-        public ICharacterAttributeChange Expand(float value)
+        public IAttributeChange Expand(float value)
         {
-            var latest = new ExpandCharacterAttributeChange(
+            var latest = new ExpandAttributeChange(
                 this, this.mLatest, value
             );
             this.mLatest = latest;
@@ -180,9 +180,9 @@ namespace Hathor
         }
 
         // 扩大提升的属性
-        public ICharacterAttributeChange ExpendIncrease(float value)
+        public IAttributeChange ExpendIncrease(float value)
         {
-            var latest = new ExpandIncreaseCharacterAttributeChange(
+            var latest = new ExpandIncreaseAttributeChange(
                 this, this.mLatest, value
             );
             this.mLatest = latest;

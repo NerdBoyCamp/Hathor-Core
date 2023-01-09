@@ -4,18 +4,18 @@ namespace Hathor
     public interface ICharacterAdventure
     {
         // 感应
-        ICharacterAttribute Perception { get; }
+        IAttribute Perception { get; }
 
         // 运气
-        ICharacterAttribute Luck { get; }
+        IAttribute Luck { get; }
 
         // 口才
-        ICharacterAttribute Eloquence { get; }
+        IAttribute Eloquence { get; }
 
         // 相貌
-        ICharacterAttribute Appearance { get; }
+        IAttribute Appearance { get; }
 
         // 获取额外属性值
-        ICharacterAttribute GetAttribute(string attrName);
+        IAttribute GetAttribute(string attrName);
     }
 }
