@@ -147,5 +147,11 @@ namespace Hathor
             }
             return this.mSlots[slot];
         }
+
+        public int FindItem(string itemID)
+        {
+            // TODO: not implemented
+            return -1;
+        }
     }
 }

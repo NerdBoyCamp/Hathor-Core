@@ -1,93 +1,192 @@
 namespace Hathor
 {
-    class DefaultCharacterAttribute : ICharacterAttribute
+    abstract class BaseCharacterAttributeChange : ICharacterAttributeChange
     {
-        protected int mValue;
-        protected int mValueDecrease;
-        protected int mValueIncrease;
+        protected DefaultCharacterAttribute mSource;
+        protected BaseCharacterAttributeChange mPrev;
+        protected BaseCharacterAttributeChange mNext;
 
-        public DefaultCharacterAttribute(int value)
+        public BaseCharacterAttributeChange(
+            DefaultCharacterAttribute source,
+            BaseCharacterAttributeChange prev
+        )
         {
-            this.mValue = value;
-            this.mValueDecrease = 0;
-            this.mValueIncrease = 0;
+            this.mSource = source;
+            this.mPrev = prev;
+            this.mNext = null;
         }
+
+        public abstract int GetValue();
+
+        public ICharacterAttribute Source { get => this.mSource; }
+
+        // 增益后数值
+        public int Value { get => this.GetValue(); }
 
         // 原始数值
-        public int Value { get => this.mValue; }
-
-        // 降低属性
-        public void Decrease(int value)
+        public int OriginValue
         {
-            this.mValueDecrease += value;
-            if (this.mValueDecrease < 0)
-            {
-                this.mValueDecrease = 0;
-            }
+            get => this.mPrev != null ? this.mPrev.Value : this.SourceOriginValue;
         }
 
-        // 降低属性的增幅
-        public void DecreaseAmplify(float value)
+        public int SourceOriginValue
         {
-            this.mValueDecrease = (int)(((float)this.mValueDecrease) * value);
-            if (this.mValueDecrease < 0)
-            {
-                this.mValueDecrease = 0;
-            }
+            get => this.mSource.OriginValue;
         }
 
-        // 提升属性
-        public void Increase(int value)
+        // 消除增益
+        public void Dispel()
         {
-            this.mValueIncrease += value;
-            if (this.mValueIncrease < 0)
+            if (this.mPrev != null)
             {
-                this.mValueIncrease = 0;
+                this.mPrev.mNext = this.mNext;
             }
-        }
-
-        // 提升属性的增幅
-        public void IncreaseAmplify(float value)
-        {
-            this.mValueIncrease = (int)(((float)this.mValueIncrease) * value);
-            if (this.mValueIncrease < 0)
+            if (this.mNext != null)
             {
-                this.mValueIncrease = 0;
+                this.mNext.mPrev = this.mPrev;
             }
-        }
-
-        public void Update()
-        {
-            if (this.mValueDecrease != 0)
+            else
             {
-                this.mValue -= this.mValueDecrease;
-                this.mValueDecrease = 0;
-            }
-
-            if (this.mValueIncrease != 0)
-            {
-                this.mValue += this.mValueIncrease;
-                this.mValueIncrease = 0;
+                this.mSource.mLatest = this.mPrev;
             }
         }
     }
 
-    class DefalutCharacterAttributeEx : DefaultCharacterAttribute, ICharacterAttributeEx
+    class IncreaseCharacterAttributeChange : BaseCharacterAttributeChange
     {
-        protected int mOriginValue;
+        protected int mValue;
 
-        public DefalutCharacterAttributeEx(int value) : base(value)
+        public IncreaseCharacterAttributeChange(
+            DefaultCharacterAttribute source,
+            BaseCharacterAttributeChange prev,
+            int value
+        ) : base(source, prev)
         {
+            this.mValue = value;
+        }
+
+        public override int GetValue()
+        {
+            return this.OriginValue + this.mValue;
+        }
+    }
+
+    class ExpandCharacterAttributeChange : BaseCharacterAttributeChange
+    {
+        protected float mValue;
+
+        public ExpandCharacterAttributeChange(
+            DefaultCharacterAttribute source,
+            BaseCharacterAttributeChange prev,
+            float value
+        ) : base(source, prev)
+        {
+            this.mValue = value;
+        }
+
+        public override int GetValue()
+        {
+            return (int)((float)this.OriginValue * this.mValue);
+        }
+    }
+
+    class ExpandIncreaseCharacterAttributeChange : BaseCharacterAttributeChange
+    {
+        protected float mValue;
+
+        public ExpandIncreaseCharacterAttributeChange(
+            DefaultCharacterAttribute source,
+            BaseCharacterAttributeChange prev,
+            float value
+        ) : base(source, prev)
+        {
+            this.mValue = value;
+        }
+
+        public override int GetValue()
+        {
+            int DeltaValue = this.OriginValue - this.SourceOriginValue;
+            DeltaValue = (int)((float)DeltaValue * this.mValue);
+            return this.SourceOriginValue + DeltaValue;
+        }
+    }
+
+    class DefaultCharacterAttribute : ICharacterAttribute
+    {
+        public int mValue;
+        public int mOriginValue;
+        public bool mIsDirty = true;
+        public BaseCharacterAttributeChange mLatest = null;
+
+        public DefaultCharacterAttribute(int value)
+        {
+            this.mValue = value;
             this.mOriginValue = value;
         }
 
-        // 属性数值
-        public int OriginValue { get => this.mOriginValue; }
-
-        // 降低属性
-        public void Reset()
+        public int GetValue()
         {
-            this.mValue = this.mOriginValue;
+            if (!this.mIsDirty)
+            {
+                return this.mValue;
+            }
+
+            if (this.mLatest != null)
+            {
+                this.mValue = this.mLatest.Value;
+            }
+            else
+            {
+                this.mValue = this.mOriginValue;
+            }
+
+            this.mIsDirty = false;
+            return this.mValue;
+        }
+
+        public void SetOriginValue(int value)
+        {
+            this.mOriginValue = value;
+            this.mIsDirty = true;
+        }
+
+        // 原始数值
+        public int Value { get => this.GetValue(); }
+
+        public int OriginValue
+        {
+            get => this.mOriginValue;
+            set => this.SetOriginValue(value);
+        }
+
+        // 提升属性
+        public ICharacterAttributeChange Increase(int value)
+        {
+            var latest = new IncreaseCharacterAttributeChange(
+                this, this.mLatest, value
+            );
+            this.mLatest = latest;
+            return latest;
+        }
+
+        // 扩大属性
+        public ICharacterAttributeChange Expand(float value)
+        {
+            var latest = new ExpandCharacterAttributeChange(
+                this, this.mLatest, value
+            );
+            this.mLatest = latest;
+            return latest;
+        }
+
+        // 扩大提升的属性
+        public ICharacterAttributeChange ExpendIncrease(float value)
+        {
+            var latest = new ExpandIncreaseCharacterAttributeChange(
+                this, this.mLatest, value
+            );
+            this.mLatest = latest;
+            return latest;
         }
     }
 }

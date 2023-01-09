@@ -145,7 +145,7 @@ namespace Hathor
                 var battle = character.GetBattle();
                 if (battle != null)
                 {
-                    battle.GetDamageBuffer(this.mCls.Series).Increase(this.mDamage);
+                    battle.HP.GetDamageBuffer(this.mCls.Series).Increase(this.mDamage);
                 }
                 this.mIsFinished = true;
             }

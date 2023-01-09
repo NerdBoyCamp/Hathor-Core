@@ -19,6 +19,7 @@ namespace Hathor
 
     public interface IItem
     {
+        // ID
         string ID { get; }
 
         // 名字
@@ -29,6 +30,9 @@ namespace Hathor
 
         // 是否已用完（销毁物品）
         bool IsUsedUp { get; }
+
+        // 当前使用者
+        ICharacter User { get; set; }
 
         // 道具类
         IItemClass GetClass();

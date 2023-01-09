@@ -8,9 +8,11 @@ namespace Hathor
 
         protected ICharacter mUser = null;
 
-        protected Dictionary<string, int> mRequirements = null;
+        protected Dictionary<string, int> mAttrRequired = null;
 
-        protected Dictionary<string, int> mPromotions = null;
+        protected Dictionary<string, int> mAttrPromoted = null;
+
+        protected Dictionary<string, ICharacterAttributeChange> mAttrChanged = null;
 
         public DefaultItemBattle(
             IItem item,
@@ -19,8 +21,9 @@ namespace Hathor
         )
         {
             this.mItem = item;
-            this.mRequirements = new Dictionary<string, int>(requirments);
-            this.mPromotions = new Dictionary<string, int>(promotions);
+            this.mAttrRequired = new Dictionary<string, int>(requirments);
+            this.mAttrPromoted = new Dictionary<string, int>(promotions);
+            this.mAttrChanged = new Dictionary<string, ICharacterAttributeChange>();
         }
 
         // 当前使用者
@@ -45,7 +48,7 @@ namespace Hathor
         public int GetAttrValueRequired(string attr)
         {
             int value = 0;
-            this.mRequirements.TryGetValue(attr, out value);
+            this.mAttrRequired.TryGetValue(attr, out value);
             return value;
         }
 
@@ -53,7 +56,7 @@ namespace Hathor
         public int GetAttrValuePromoted(string attr)
         {
             int value = 0;
-            this.mPromotions.TryGetValue(attr, out value);
+            this.mAttrPromoted.TryGetValue(attr, out value);
             return value;
         }
 
@@ -104,7 +107,7 @@ namespace Hathor
                 var battle = user.GetBattle();
                 if (battle != null)
                 {
-                    foreach (var attr in this.mPromotions)
+                    foreach (var attr in this.mAttrPromoted)
                     {
                         battle.Promote(attr.Key, this.mItem.ID, attr.Value);
                     }

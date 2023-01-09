@@ -127,7 +127,8 @@ namespace Hathor
                 if (this.mCls.mHealSeconds == 0)
                 {
                     this.mHealAmount = this.mCls.mHealAmount;
-                    battle.GetHealingBuffer(this.mCls.Series).Increase(this.mHealAmount);
+                    var buffer = battle.HP.GetHealingBuffer(this.mCls.Series);
+                    buffer.Increase(this.mHealAmount);
                     return;
                 }
 
@@ -145,7 +146,11 @@ namespace Hathor
                     return;
                 }
 
-                battle.GetHealingBuffer(this.mCls.Series).Increase(healAmountDelta);
+                {
+                    var buffer = battle.HP.GetHealingBuffer(this.mCls.Series);
+                    buffer.Increase(healAmountDelta);
+                }
+
                 this.mHealAmount = healAmount;
             }
 

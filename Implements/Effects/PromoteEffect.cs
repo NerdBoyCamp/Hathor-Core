@@ -71,13 +71,14 @@ namespace Hathor
         class PromoteEffect : IEffect
         {
             protected PromoteEffectClass mCls;
-
             protected string mID;
+            protected Dictionary<string, ICharacterAttributeChange> mAttributesChanges;
 
             public PromoteEffect(PromoteEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
+                this.mAttributesChanges = new Dictionary<string, ICharacterAttributeChange>();
             }
 
             public string ID { get => this.mID; }
@@ -105,8 +106,9 @@ namespace Hathor
 
                 foreach (var attr in this.mCls.mAttributes)
                 {
-                    battle.GetAttribute(attr.Key).
-                    battle.Promote(attr.Key, this.ID, attr.Value);
+                    var attrObj = battle.GetAttribute(attr.Key);
+                    var attrChg = attrObj.Increase(attr.Value);
+                    this.mAttributesChanges.Add(attr.Key, attrChg);
                 }
             }
 
