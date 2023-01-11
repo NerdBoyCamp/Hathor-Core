@@ -4,123 +4,156 @@ namespace Hathor
 {
     class DefaultItemBattleAttributes : IItemBattleAttributes
     {
+        protected Dictionary<string, IAttribute> mAttributes;
 
+        public DefaultItemBattleAttributes(Dictionary<string, int> attrs)
+        {
+            foreach (var attr in attrs)
+            {
+                this.mAttributes.Add(attr.Key, new DefaultAttribute(attr.Value));
+            }
+        }
+
+        // 力量需求
+        public IAttribute Strength { get => this.GetAttribute("Str"); }
+
+        // 智力需求
+        public IAttribute Intelligence { get => this.GetAttribute("Int"); }
+
+        // 敏捷需求
+        public IAttribute Dexterity { get => this.GetAttribute("Dex"); }
+
+        // 获取额外属性需求值
+        public IAttribute GetAttribute(string attrName)
+        {
+            IAttribute attr = null;
+            this.mAttributes.TryGetValue(attrName, out attr);
+            return attr;
+        }
+
+        public List<string> ListAttributeName()
+        {
+            return new List<string>(this.mAttributes.Keys);
+        }
     }
 
     class DefaultItemBattle : IItemBattle
     {
         protected IItem mItem;
 
+        protected DefaultItemBattleAttributes mRequirments;
+
+        protected DefaultItemBattleAttributes mEnhancements;
+
         protected ICharacter mUser = null;
 
-        protected Dictionary<string, int> mAttrRequired = null;
+        protected float mUserPerformance = -1;
 
-        protected Dictionary<string, int> mAttrPromoted = null;
+        protected List<IAttributeChange> mChanges;
 
-        protected Dictionary<string, IAttributeChange> mAttrChanged = null;
-
-        public DefaultItemBattle(
-            IItem item,
-            Dictionary<string, int> requirments,
-            Dictionary<string, int> promotions
-        )
+        protected void ApplyUser(ICharacter user)
         {
-            this.mItem = item;
-            this.mAttrRequired = new Dictionary<string, int>(requirments);
-            this.mAttrPromoted = new Dictionary<string, int>(promotions);
-            this.mAttrChanged = new Dictionary<string, IAttributeChange>();
+            if (this.mUser == user)
+            {
+                return;
+            }
+
+            this.ApplyEnhancements(user);
+            this.mUser = user;
+            this.mUserPerformance = -1;  // 设置为-1表示需要重新计算
         }
 
-        // 当前使用者
-        public ICharacter User { get => this.mUser; }
-
-        // 力量需求
-        public int StrengthRequired { get => this.GetAttrValueRequired("Str"); }
-
-        public int StrengthPromoted { get => this.GetAttrValuePromoted("Str"); }
-
-        // 智力需求
-        public int IntelligenceRequired { get => this.GetAttrValueRequired("Int"); }
-
-        public int IntelligencePromoted { get => this.GetAttrValuePromoted("Int"); }
-
-        // 敏捷需求
-        public int DexterityRequired { get => this.GetAttrValueRequired("Dex"); }
-
-        public int DexterityPromoted { get => this.GetAttrValuePromoted("Dex"); }
-
-        // 获取额外属性需求值
-        public int GetAttrValueRequired(string attr)
+        protected void ApplyEnhancements(ICharacter user)
         {
-            int value = 0;
-            this.mAttrRequired.TryGetValue(attr, out value);
-            return value;
+            foreach (var chg in this.mChanges)
+            {
+                chg.Dispel();
+            }
+            this.mChanges.Clear();
+
+            if (user == null)
+            {
+                return;
+            }
+
+            var battle = user.GetBattle();
+            if (battle == null)
+            {
+                return;
+            }
+
+            foreach (var attrName in this.mEnhancements.ListAttributeName())
+            {
+                var attr = this.mEnhancements.GetAttribute(attrName);
+                var attrChar = battle.GetAttribute(attrName);
+                if (attrChar != null)
+                {
+                    this.mChanges.Add(attrChar.Increase(attr.Value));
+                }
+            }
         }
 
-        // 获取额外属性提升值
-        public int GetAttrValuePromoted(string attr)
-        {
-            int value = 0;
-            this.mAttrPromoted.TryGetValue(attr, out value);
-            return value;
-        }
-
-        // 当前使用角色的发挥度
-        public float GetUserPerformance()
+        protected float GetUserPerformance()
         {
             if (this.mUser == null)
             {
-                return 0;
+                return -1;
+            }
+
+            if (this.mUserPerformance >= 0)
+            {
+                return this.mUserPerformance;
             }
 
             var battle = this.mUser.GetBattle();
             if (battle == null)
             {
-                return 0;
+                return -1;
             }
 
-            // TODO: ...
-
-            return 1;
-        }
-
-        public bool SetUser(ICharacter user)
-        {
-            if (this.mUser == user)
+            float minPerf = 100;  // 最大发挥度
+            foreach (var attrName in this.mRequirments.ListAttributeName())
             {
-                return true;
-            }
-
-            if (!this.mItem.IsUsable && user != null)
-            {
-                return false;
-            }
-
-            if (this.mUser != null)
-            {
-                // remove promotions
-                var battle = this.mUser.GetBattle();
-                if (battle != null)
+                var attr = this.mRequirments.GetAttribute(attrName);
+                var attrChar = battle.GetAttribute(attrName);
+                if (attrChar != null)
                 {
-                    battle.PromoteClear(this.mItem.ID);
+                    minPerf = 0;
                 }
-            }
-
-            if (user != null)
-            {
-                // add promotions
-                var battle = user.GetBattle();
-                if (battle != null)
+                else
                 {
-                    foreach (var attr in this.mAttrPromoted)
+                    float perf = (float)attrChar.OriginValue / (float)attr.Value;
+                    if (perf < minPerf)
                     {
-                        battle.Promote(attr.Key, this.mItem.ID, attr.Value);
+                        minPerf = perf;
                     }
                 }
             }
-
-            this.mUser = user;
-            return true;
+            this.mUserPerformance = minPerf;
+            return minPerf;
         }
+
+        public DefaultItemBattle(
+            IItem item,
+            Dictionary<string, int> requirments,
+            Dictionary<string, int> enhancements
+        )
+        {
+            this.mItem = item;
+            this.mRequirments = new DefaultItemBattleAttributes(requirments);
+            this.mEnhancements = new DefaultItemBattleAttributes(enhancements);
+            this.mChanges = new List<IAttributeChange>();
+        }
+
+        public IItemBattleAttributes Requirments { get => this.mRequirments; }
+
+        // 属性的增益/减益
+        public IItemBattleAttributes Enhancements { get => this.mEnhancements; }
+
+        // 当前使用者
+        public ICharacter User { get => this.mUser; set => this.ApplyUser(value); }
+
+        // 当前使用角色的发挥度
+        public float UserPerformance { get => this.GetUserPerformance(); }
     }
 }

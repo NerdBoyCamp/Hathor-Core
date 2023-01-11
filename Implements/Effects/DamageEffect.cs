@@ -94,7 +94,7 @@ namespace Hathor
             }
 
             // 计算发挥度
-            var perf = battle.GetUserPerformance();
+            var perf = battle.UserPerformance;
             if (perf <= 0)
             {
                 return null;

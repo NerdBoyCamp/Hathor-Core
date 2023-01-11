@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+
+
 namespace Hathor
 {
     // 物品装备推荐条件（决定发挥度）
@@ -14,6 +17,9 @@ namespace Hathor
 
         // 获取额外属性需求值
         IAttribute GetAttribute(string attrName);
+
+        // 列出所有属性名
+        List<string> ListAttributeName();
     }
 
     public interface IItemBattle
@@ -22,12 +28,12 @@ namespace Hathor
         IItemBattleAttributes Requirments { get; }
 
         // 属性的增益/减益
-        IItemBattleAttributes Changes { get; }
+        IItemBattleAttributes Enhancements { get; }
 
         // 当前使用者
         ICharacter User { get; set; }
-        
+
         // 当前使用角色的发挥度
-        float GetUserPerformance();
+        float UserPerformance { get; }
     }
 }

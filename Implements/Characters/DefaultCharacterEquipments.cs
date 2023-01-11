@@ -85,10 +85,7 @@ namespace Hathor
                     return null;
                 }
 
-                if (!battle.SetUser(this.mChar))
-                {
-                    return null;
-                }
+                battle.User = this.mChar;
             }
 
             if (itemPrev != null)
@@ -96,7 +93,7 @@ namespace Hathor
                 IItemBattle battle = item.GetBattle();
                 if (battle != null)
                 {
-                    battle.SetUser(null);
+                    battle.User = null;
                 }
             }
 
