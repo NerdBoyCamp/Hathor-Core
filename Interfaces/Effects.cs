@@ -11,7 +11,7 @@ namespace Hathor
         // 获取所有效果(按照优先级降序排列)
         IEffect[] ListEffects();
 
-        // 更新身上效果
+        // 更新效果
         void Update();
     }
 

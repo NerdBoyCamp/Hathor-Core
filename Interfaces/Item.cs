@@ -12,9 +12,6 @@ namespace Hathor
 
         // 类别 头盔/武器/胸甲/鞋子/腰带/回复道具/...
         string Series { get; }
-
-        // 创建
-        IItem Create();
     }
 
     public interface IItem

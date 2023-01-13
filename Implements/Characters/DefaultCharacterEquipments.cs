@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Hathor
@@ -23,8 +24,7 @@ namespace Hathor
             this.mChar = character;
             this.mSlots = new Dictionary<string, ItemSlot>();
             this.mSlots["Head"] = new ItemSlot { item = null, series = "Helmet" };
-            this.mSlots["RightHand"] = new ItemSlot { item = null, series = "Weapon" };
-            this.mSlots["LeftHand"] = new ItemSlot { item = null, series = "Weapon" };
+            this.mSlots["Main"] = new ItemSlot { item = null, series = "Weapon" };
             this.mSlots["Chest"] = new ItemSlot { item = null, series = "Armor" };
             this.mSlots["Waist"] = new ItemSlot { item = null, series = "Belt" };
             this.mSlots["Feet"] = new ItemSlot { item = null, series = "Shoes" };
@@ -33,11 +33,8 @@ namespace Hathor
         // 头
         public IItem Head { get => this.GetItem("Head"); }
 
-        // 右手
-        public IItem RightHand { get => this.GetItem("RightHand"); }
-
-        // 左手
-        public IItem LeftHand { get => this.GetItem("LeftHand"); }
+        // 主手
+        public IItem Main { get => this.GetItem("Main"); }
 
         // 胸
         public IItem Chest { get => this.GetItem("Chest"); }
@@ -104,6 +101,11 @@ namespace Hathor
         public IItem RemoveItem(string slot)
         {
             return this.EquipItem(slot, null);
+        }
+
+        public IItem[] ListItem()
+        {
+            return this.mSlots.Values.Select(slot => slot.item).ToArray();
         }
 
         public void Update()

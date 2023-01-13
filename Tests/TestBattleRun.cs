@@ -1,30 +1,39 @@
 using System;
+using System.Runtime;
 using System.Collections.Generic;
 using System.Threading;
+using Newtonsoft.Json;
 using Hathor;
 
 namespace Hathor
 {
+    class Test
+    {
+        public string Name { set; get; }
+    }
+
     class TestBattleRun
     {
         static void Main(string[] args)
         {
-            // Display the number of command line arguments.
-            // Console.WriteLine(args.Length);
-            // var a = new Dictionary<string, int>();
-            // a["a"] = 1;
-            // a["a"] = 2;
-            // var b = 0;
-            // var c = 0;
-            // Console.WriteLine(a["a"]);
-            // Console.WriteLine(a.TryGetValue("a", out b));
-            // Console.WriteLine(a.TryGetValue("b", out c));
-            // Console.WriteLine(b);
-            // Console.WriteLine(c);
+            
+            // var stageCreater = TestStageCreater().Create();
+            string configs = "{\"Name\": \"eheh\"}";
+
+            Test configObj = JsonConvert.DeserializeObject<Test>(configs);
+            
+            // var configObjects = JsonValue.Parse(configs);
+
+            // Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
+            // object a = new DefaultAtionCreater();
+            // var prop = a.GetType().GetProperty("test");
+
+
+            // Console.WriteLine(prop == null);
+            // a.TryGetValue("A", out aa);
             // Console.WriteLine(Util.RamdonID());
-            Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
-            Thread.Sleep(1000);
-            Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
+            // Thread.Sleep(1000);
+            // Console.WriteLine(DateTime.UtcNow.Ticks / 10000000.0);
         }
     }
 }

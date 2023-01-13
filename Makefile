@@ -3,14 +3,15 @@
 CSHARP_SOURCE_FILES = $(wildcard */*/*.cs */*.cs *.cs)
 
 #add needed flags to the compilerCSHARP_FLAGS = -out:$(BUILD_EXEC)
-CSHARP_FLAGS = -out:$(BUILD_EXEC) -target:exe
+CSHARP_FLAGS = -out:$(BUILD_EXEC) -target:exe -r:$(BUILD_DEPS)
 
 #change to the environment compiler
-CSHARP_COMPILER = mcs
+CSHARP_COMPILER = csc
 
 #if needed, change the executable file
-BUILD_PATH = Build
+BUILD_PATH = Builds
 BUILD_EXEC = ${BUILD_PATH}/HathorCore.exe
+BUILD_DEPS = "C:\Program Files\WindowsPowerShell\Modules\newtonsoft.json\1.0.2.201\libs\Newtonsoft.Json.dll"
 
 ifeq ($(OS), Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
   detected_OS := Windows

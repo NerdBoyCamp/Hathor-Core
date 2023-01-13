@@ -6,15 +6,6 @@ namespace Hathor
 
         // 名字
         string Name { get; }
-
-        // 创建建筑
-        IBuilding Create();
-    }
-
-    public interface IBuildingUpgrade
-    {
-        // 等级
-        int LV { get; }
     }
 
     public interface IBuilding

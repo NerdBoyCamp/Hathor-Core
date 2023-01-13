@@ -2,6 +2,45 @@ using System;
 
 namespace Hathor
 {
+    class DefaultCharacterConfig
+    {
+        public string Name { get; set; }
+        public int HP { get; set; }
+        public int MaxHP { get; set; }
+        public int AP { get; set; }
+        public int MaxAP { get; set; }
+        public int EXP { get; set; }
+        public int LV { get; set; }
+        public int AvailablePoints { get; set; }
+        public int Perception { get; set; }
+        public int Luck { get; set; }
+        public int Eloquence { get; set; }
+        public int Appearance { get; set; }
+        public int Strength { get; set; }
+
+    }
+
+    class DefaultCharacterClass : ICharacterClass
+    {
+        public string ID { get => "fZ4B8dNd6U+s"; }
+
+        // 名字
+        public string Name { get => "Default Character"; }
+
+        // 描述
+        public string Desctiption { get => this.Name; }
+
+        public ICharacter Create(object configs)
+        {
+            var configObject = configs as DefaultCharacterConfig;
+            if (configObject == null)
+            {
+                return null;
+            }
+            return null;
+        }
+    }
+
     class DefaultCharacter : ICharacter
     {
         // 所属类别

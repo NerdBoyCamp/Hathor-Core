@@ -8,6 +8,7 @@ namespace Hathor
 
         public DefaultItemBattleAttributes(Dictionary<string, int> attrs)
         {
+            this.mAttributes = new Dictionary<string, IAttribute>();
             foreach (var attr in attrs)
             {
                 this.mAttributes.Add(attr.Key, new DefaultAttribute(attr.Value));
