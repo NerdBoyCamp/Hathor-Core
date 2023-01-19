@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Hathor
@@ -12,9 +11,9 @@ namespace Hathor
 
         public DefaultCharacterBattle(
             ICharacter character,
-            Dictionary<string, int> attributes,
-            int hp,
-            int ap
+            Dictionary<string, float> attributes,
+            float hp,
+            float ap
         )
         {
             this.mChar = character;
@@ -49,11 +48,18 @@ namespace Hathor
         // 敏捷
         public IAttribute Dexterity { get => this.GetAttribute("Dex"); }
 
+        public IAttribute Speed { get => this.GetAttribute("Spd"); }
+
+        // 暴击率
+        public IAttribute CriticalHitRate { get => this.GetAttribute("CrtR"); }
+
+        // 暴击伤害
+        public IAttribute CriticalHitDamage { get => this.GetAttribute("CrtD"); }
+
         // 获取额外属性值
         public IAttribute GetAttribute(string attrName)
         {
-            IAttribute value = null;
-            this.mAttributes.TryGetValue(attrName, out value);
+            this.mAttributes.TryGetValue(attrName, out IAttribute value);
             return value;
         }
 

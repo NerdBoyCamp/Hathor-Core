@@ -16,20 +16,20 @@ namespace Hathor
             this.mNext = null;
         }
 
-        public abstract int GetValue();
+        public abstract float GetValue();
 
         public IAttribute Source { get => this.mSource; }
 
         // 增益后数值
-        public int Value { get => this.GetValue(); }
+        public float Value { get => this.GetValue(); }
 
         // 原始数值
-        public int OriginValue
+        public float OriginValue
         {
             get => this.mPrev != null ? this.mPrev.Value : this.SourceOriginValue;
         }
 
-        public int SourceOriginValue
+        public float SourceOriginValue
         {
             get => this.mSource.OriginValue;
         }
@@ -54,18 +54,18 @@ namespace Hathor
 
     class IncreaseAttributeChange : BaseAttributeChange
     {
-        protected int mValue;
+        protected float mValue;
 
         public IncreaseAttributeChange(
             DefaultAttribute source,
             BaseAttributeChange prev,
-            int value
+            float value
         ) : base(source, prev)
         {
             this.mValue = value;
         }
 
-        public override int GetValue()
+        public override float GetValue()
         {
             return this.OriginValue + this.mValue;
         }
@@ -84,9 +84,9 @@ namespace Hathor
             this.mValue = value;
         }
 
-        public override int GetValue()
+        public override float GetValue()
         {
-            return (int)((float)this.OriginValue * this.mValue);
+            return this.OriginValue * this.mValue;
         }
     }
 
@@ -103,28 +103,28 @@ namespace Hathor
             this.mValue = value;
         }
 
-        public override int GetValue()
+        public override float GetValue()
         {
-            int DeltaValue = this.OriginValue - this.SourceOriginValue;
-            DeltaValue = (int)((float)DeltaValue * this.mValue);
+            float DeltaValue = this.OriginValue - this.SourceOriginValue;
+            DeltaValue = DeltaValue * this.mValue;
             return this.SourceOriginValue + DeltaValue;
         }
     }
 
     class DefaultAttribute : IAttribute
     {
-        public int mValue;
-        public int mOriginValue;
+        public float mValue;
+        public float mOriginValue;
         public bool mIsDirty = true;
         public BaseAttributeChange mLatest = null;
 
-        public DefaultAttribute(int value)
+        public DefaultAttribute(float value)
         {
             this.mValue = value;
             this.mOriginValue = value;
         }
 
-        public int GetValue()
+        public float GetValue()
         {
             if (!this.mIsDirty)
             {
@@ -144,23 +144,23 @@ namespace Hathor
             return this.mValue;
         }
 
-        public void SetOriginValue(int value)
+        public void SetOriginValue(float value)
         {
             this.mOriginValue = value;
             this.mIsDirty = true;
         }
 
         // 原始数值
-        public int Value { get => this.GetValue(); }
+        public float Value { get => this.GetValue(); }
 
-        public int OriginValue
+        public float OriginValue
         {
             get => this.mOriginValue;
             set => this.SetOriginValue(value);
         }
 
         // 提升属性
-        public IAttributeChange Increase(int value)
+        public IAttributeChange Increase(float value)
         {
             var latest = new IncreaseAttributeChange(
                 this, this.mLatest, value

@@ -2,10 +2,10 @@ namespace Hathor
 {
     public interface ICharacterHealthBuffer
     {
-        int Value { get; }
+        float Value { get; }
 
         // 提升数值
-        void Increase(int value);
+        void Increase(float value);
 
         // 扩大数值
         void Expend(float value);
@@ -14,7 +14,7 @@ namespace Hathor
     public interface ICharacterHealth
     {
         // 血量值
-        int Value { get; }
+        float Value { get; }
 
         // 回复计算
         ICharacterHealthBuffer GetHealingBuffer(string series);

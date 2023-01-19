@@ -48,16 +48,14 @@ namespace Hathor
         // 获取装备位上的物品
         public IItem GetItem(string slot)
         {
-            ItemSlot itemSlot = null;
-            this.mSlots.TryGetValue(slot, out itemSlot);
-            return itemSlot == null ? null : itemSlot.item;
+            this.mSlots.TryGetValue(slot, out ItemSlot itemSlot);
+            return itemSlot?.item;
         }
 
         // 装备物品
         public IItem EquipItem(string slot, IItem item)
         {
-            ItemSlot itemSlot = null;
-            this.mSlots.TryGetValue(slot, out itemSlot);
+            this.mSlots.TryGetValue(slot, out ItemSlot itemSlot);
             if (itemSlot == null)
             {
                 return null;
@@ -105,7 +103,8 @@ namespace Hathor
 
         public IItem[] ListItem()
         {
-            return this.mSlots.Values.Select(slot => slot.item).ToArray();
+            return this.mSlots.Values.Where(
+                slot => slot.item != null).Select(slot => slot.item).ToArray();
         }
 
         public void Update()

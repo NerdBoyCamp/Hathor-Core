@@ -2,10 +2,10 @@ namespace Hathor
 {
     public interface ICharacterCreater
     {
-        ICharacter Create(string clsID);
-        
-        ICharacterClass[] ListClass();
-
-        ICharacterClass FindClass(string clsID);
+        ICharacter Create(
+            string templateId,
+            IItemCreater itemCreater,
+            IAbilityCreater abilityCreater
+        );
     }
 }

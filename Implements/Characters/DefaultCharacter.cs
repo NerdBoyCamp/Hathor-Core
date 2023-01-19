@@ -1,23 +1,27 @@
-using System;
+using System.Collections.Generic;
 
 namespace Hathor
 {
     class DefaultCharacterConfig
     {
         public string Name { get; set; }
-        public int HP { get; set; }
-        public int MaxHP { get; set; }
-        public int AP { get; set; }
-        public int MaxAP { get; set; }
-        public int EXP { get; set; }
-        public int LV { get; set; }
-        public int AvailablePoints { get; set; }
-        public int Perception { get; set; }
-        public int Luck { get; set; }
-        public int Eloquence { get; set; }
-        public int Appearance { get; set; }
-        public int Strength { get; set; }
-
+        public float HP { get; set; }
+        public float MaxHP { get; set; }
+        public float AP { get; set; }
+        public float MaxAP { get; set; }
+        public float EXP { get; set; }
+        public float LV { get; set; }
+        public float AvailablePoints { get; set; }
+        public float Perception { get; set; }
+        public float Luck { get; set; }
+        public float Eloquence { get; set; }
+        public float Appearance { get; set; }
+        public float Strength { get; set; }
+        public float Intelligence { get; set; }
+        public float Dexterity { get; set; }
+        public float Speed { get; set; }
+        public float CriticalHitRate { get; set; }
+        public float CriticalHitDamage { get; set; }
     }
 
     class DefaultCharacterClass : ICharacterClass
@@ -32,11 +36,32 @@ namespace Hathor
 
         public ICharacter Create(object configs)
         {
-            var configObject = configs as DefaultCharacterConfig;
-            if (configObject == null)
+            if (configs is DefaultCharacterConfig configObject)
             {
-                return null;
+                var character = new DefaultCharacter(this, Util.RamdonID());
+                character.Name = configObject.Name;
+                character.mEffects = new DefaultCharacterEffects(character);
+                character.mAbilities = new DefaultAbilities();
+                character.mStores = new DefaultCharacterStores(character);
+                character.mEquipments = new DefaultCharacterEquipments(character);
+                character.mBattle = new DefaultCharacterBattle(
+                    character,
+                    new Dictionary<string, float> {
+                        { "MaxHP", configObject.MaxHP },
+                        { "MaxAP", configObject.MaxAP },
+                        { "Str", configObject.Strength },
+                        { "Int", configObject.Intelligence },
+                        { "Dex", configObject.Dexterity },
+                        { "CrtR", configObject.CriticalHitRate },
+                        { "CrtD", configObject.CriticalHitDamage },
+                    },
+                    configObject.HP,
+                    configObject.AP
+                );
+
+                return character;
             }
+            
             return null;
         }
     }
@@ -56,7 +81,7 @@ namespace Hathor
         public IEventListener mListener = null;
 
         // 角色属性
-        public ICharacterAdventure mAttributes = null;
+        public ICharacterAdventure mAdventure = null;
 
         // 角色战斗
         public ICharacterBattle mBattle = null;
@@ -68,7 +93,7 @@ namespace Hathor
         public IEffects mEffects = null;
 
         // 角色能力
-        public IEffectAbilities mAbilities = null;
+        public IAbilities mAbilities = null;
 
         // 角色装备
         public ICharacterEquipments mEquipments = null;
@@ -94,7 +119,7 @@ namespace Hathor
         public ICharacterClass GetClass() { return this.mCls; }
 
         // 当前角色属性
-        public ICharacterAdventure GetAdventure() { return this.mAttributes; }
+        public ICharacterAdventure GetAdventure() { return this.mAdventure; }
 
         // 当前角色战斗
         public ICharacterBattle GetBattle() { return this.mBattle; }
@@ -106,7 +131,7 @@ namespace Hathor
         public IEffects GetEffects() { return this.mEffects; }
 
         // 当前角色能力/技能
-        public IEffectAbilities GetAbilities() { return this.mAbilities; }
+        public IAbilities GetAbilities() { return this.mAbilities; }
 
         // 当前角色装备
         public ICharacterEquipments GetEquipments() { return this.mEquipments; }

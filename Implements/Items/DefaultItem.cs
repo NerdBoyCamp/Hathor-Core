@@ -12,7 +12,7 @@ namespace Hathor
 
         public IEffects mEffects = null;
 
-        public IEffectAbilities mAbilities = null;
+        public IAbilities mAbilities = null;
 
         public DefaultItem(IItemClass cls, string id)
         {
@@ -42,7 +42,7 @@ namespace Hathor
         public IEffects GetEffects() { return this.mEffects; }
 
         // 当前道具拥有的可触发效果（能力/技能）
-        public IEffectAbilities GetAbilities() { return this.mAbilities; }
+        public IAbilities GetAbilities() { return this.mAbilities; }
 
         public void Publish(IEvent ev)
         {

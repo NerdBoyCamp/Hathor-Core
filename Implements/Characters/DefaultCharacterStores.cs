@@ -154,4 +154,22 @@ namespace Hathor
             return -1;
         }
     }
+
+    class DefaultCharacterStores: ICharacterStores
+    {
+        protected ICharacterStore mKnapsack;
+
+        protected ICharacterStore mWarehouse;
+
+        public DefaultCharacterStores(ICharacter character)
+        {
+            this.mKnapsack = new DefaultCharacterStore(character, "Knapsack", 30);
+            this.mWarehouse = new DefaultCharacterStore(character, "Warehouse", 100);
+        }
+
+        public ICharacterStore Knapsack { get => this.mKnapsack; }
+
+        // 仓库
+        public ICharacterStore Warehouse { get => this.mWarehouse; }
+    }
 }

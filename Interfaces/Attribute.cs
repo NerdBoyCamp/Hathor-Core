@@ -6,13 +6,13 @@ namespace Hathor
         IAttribute Source { get; }
 
         // 增益后数值
-        int Value { get; }
+        float Value { get; }
 
         // 原始数值
-        int OriginValue { get; }
+        float OriginValue { get; }
 
         // 源属性的原始数值
-        int SourceOriginValue { get; }
+        float SourceOriginValue { get; }
 
         // 消除增益
         void Dispel();
@@ -21,13 +21,13 @@ namespace Hathor
     public interface IAttribute
     {
         // 属性数值
-        int Value { get; }
+        float Value { get; }
 
         // 原始数值
-        int OriginValue { get; set; }
+        float OriginValue { get; set; }
 
         // 提升属性
-        IAttributeChange Increase(int value);
+        IAttributeChange Increase(float value);
 
         // 扩大属性
         IAttributeChange Expand(float value);

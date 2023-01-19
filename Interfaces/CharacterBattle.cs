@@ -1,5 +1,3 @@
-using System;
-
 namespace Hathor
 {
     // 战斗相关
@@ -26,6 +24,18 @@ namespace Hathor
 
         // 敏捷
         IAttribute Dexterity { get; }
+
+        // 移动速度
+        IAttribute Speed { get; }
+
+        // 暴击率
+        IAttribute CriticalHitRate { get; }
+
+        // 暴击伤害
+        IAttribute CriticalHitDamage { get; }
+
+        // 物理伤害
+        // IAttribute PhysicalDamage { get; }
 
         // 获取额外属性值
         IAttribute GetAttribute(string attrName);

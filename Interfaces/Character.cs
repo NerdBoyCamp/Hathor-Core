@@ -45,7 +45,7 @@ namespace Hathor
         IEffects GetEffects();
 
         // 当前角色能力/技能
-        IEffectAbilities GetAbilities();
+        IAbilities GetAbilities();
 
         // 触发角色变化的事件
         void Publish(IEvent ev);

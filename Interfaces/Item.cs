@@ -38,7 +38,7 @@ namespace Hathor
         IEffects GetEffects();
 
         // 当前道具拥有的可触发效果（能力/技能）
-        IEffectAbilities GetAbilities();
+        IAbilities GetAbilities();
 
         // 触发物品变化的事件
         void Publish(IEvent ev);

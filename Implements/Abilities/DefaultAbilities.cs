@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Hathor
 {
-    class DefaultEffectAbilities : IEffectAbilities
+    class DefaultAbilities : IAbilities
     {
         protected Dictionary<string, IEffectClass> mAbilities;
 
-        public DefaultEffectAbilities()
+        public DefaultAbilities()
         {
             this.mAbilities = new Dictionary<string, IEffectClass>();
         }

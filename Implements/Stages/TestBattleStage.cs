@@ -59,37 +59,43 @@ namespace Hathor
 
         public void OnNotify(IEvent ev)
         {
-            var actionEvent = ev as TestBattleActionEvent;
-            if (actionEvent != null)
+            if (ev is TestBattleActionEvent actionEvent)
             {
+                Console.WriteLine("选择技能：");
                 var actions = this.mActionCreater.CreateByCharacter(actionEvent.Attacker);
                 // 选择行动
                 for (int i = 0; i < actions.Length; i++)
                 {
                     var action = actions[i];
-                    Console.WriteLine("选择技能");
                     Console.WriteLine(string.Format("{0} {1}", i, action.Name));
                 }
 
-                IAction actionSelected = null;
+                IAction actionSelected;
                 while (true)
                 {
-                    int actionIndex = Convert.ToInt32(Console.ReadLine());
-                    if (actionIndex < 0 || actionIndex >= actions.Length)
+                    try
+                    {
+                        int actionIndex = Convert.ToInt32(Console.ReadLine());
+                        if (actionIndex < 0 || actionIndex >= actions.Length)
+                        {
+                            Console.WriteLine("无效选项，请重新选择");
+                            continue;
+                        }
+                        actionSelected = actions[actionIndex];
+                        if (
+                            !actionSelected.IsAppliableOnCharacter ||
+                            !actionSelected.IsAppliable
+                        )
+                        {
+                            Console.WriteLine(string.Format("{0} 无法释放", actionSelected.Name));
+                            continue;
+                        }
+                        break;
+                    }
+                    catch (FormatException)
                     {
                         Console.WriteLine("无效选项，请重新选择");
-                        continue;
                     }
-                    actionSelected = actions[actionIndex];
-                    if (
-                        !actionSelected.IsAppliableOnCharacter ||
-                        !actionSelected.IsAppliable
-                    )
-                    {
-                        Console.WriteLine(string.Format("{0} 无法释放", actionSelected.Name));
-                        continue;
-                    }
-                    break;
                 }
 
                 if (actionSelected.IsAppliable)
@@ -129,8 +135,8 @@ namespace Hathor
                     }
 
                     var deltaTime = DateTime.UtcNow.Ticks - startTime;
-                    if (deltaTime / 10000000.0 >= 2.0)
-                    {// 更新满2秒钟
+                    if (deltaTime / 10000000.0 >= 3.0)
+                    {// 更新满3秒钟
                         break;
                     }
                 }

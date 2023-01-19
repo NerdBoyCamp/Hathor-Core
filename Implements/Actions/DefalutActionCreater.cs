@@ -21,7 +21,7 @@ namespace Hathor
             var abilities = character.GetAbilities();
             if (abilities != null)
             {
-                actions.Union(
+                actions = actions.Union(
                     abilities.ListAbilities().Select(
                     ability => new DefaultCharacterAction(character, ability))
                 );
@@ -35,7 +35,7 @@ namespace Hathor
                     var itemAbilities = item.GetAbilities();
                     if (itemAbilities != null)
                     {
-                        actions.Union(
+                        actions = actions.Union(
                             itemAbilities.ListAbilities().Select(
                             ability => new DefaultItemAction(item, ability))
                         );

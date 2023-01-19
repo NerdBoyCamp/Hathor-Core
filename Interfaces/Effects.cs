@@ -14,19 +14,4 @@ namespace Hathor
         // 更新效果
         void Update();
     }
-
-    public interface IEffectAbilities
-    {
-        // 添加能力
-        IEffectClass AddAbility(IEffectClass effectClass);
-
-        // 删除能力
-        IEffectClass RemoveAbility(string effectClassID);
-
-        // 查找能力
-        IEffectClass GetAbility(string effectClassID);
-
-        // 获取所有能力
-        IEffectClass[] ListAbilities();
-    }
 }
