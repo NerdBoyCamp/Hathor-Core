@@ -13,7 +13,7 @@ namespace Hathor
         string Desctiption { get; }
 
         // 创建
-        ICharacter Create(object configs);
+        ICharacter Create(dynamic configs);
     }
 
     public interface ICharacter

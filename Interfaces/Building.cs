@@ -6,6 +6,9 @@ namespace Hathor
 
         // 名字
         string Name { get; }
+
+        // 创建实例
+        IBuilding Create(dynamic configs);
     }
 
     public interface IBuilding

@@ -61,12 +61,17 @@ namespace Hathor
         {
             if (ev is TestBattleActionEvent actionEvent)
             {
-                Console.WriteLine("选择技能：");
-                var actions = this.mActionCreater.CreateByCharacter(actionEvent.Attacker);
+                Console.WriteLine(string.Format(
+                    "{0}选择技能攻击{1}：",
+                    actionEvent.Attacker.Name,
+                    actionEvent.Defender.Name));
+                
+                IAction[] actions = this.mActionCreater.CreateByCharacter(
+                    actionEvent.Attacker);
                 // 选择行动
                 for (int i = 0; i < actions.Length; i++)
                 {
-                    var action = actions[i];
+                    IAction action = actions[i];
                     Console.WriteLine(string.Format("{0} {1}", i, action.Name));
                 }
 
@@ -83,7 +88,7 @@ namespace Hathor
                         }
                         actionSelected = actions[actionIndex];
                         if (
-                            !actionSelected.IsAppliableOnCharacter ||
+                            !actionSelected.IsAppliableOnCharacter &&
                             !actionSelected.IsAppliable
                         )
                         {
@@ -144,6 +149,11 @@ namespace Hathor
                 // 等待指令
                 var attacker = this.mCharacters[attackerIndex];
                 var defender = this.mCharacters[defenderIndex];
+
+                Console.WriteLine(string.Format(
+                    "{0}剩余HP：{1}", attacker.Name, attacker.GetBattle().HP.Value));
+                Console.WriteLine(string.Format(
+                    "{0}剩余HP：{1}", defender.Name, defender.GetBattle().HP.Value));
 
                 // 选择攻击技能释放
                 this.OnNotify(new TestBattleActionEvent()

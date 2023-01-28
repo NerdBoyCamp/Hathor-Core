@@ -51,10 +51,16 @@ namespace Hathor
         public IAttribute Speed { get => this.GetAttribute("Spd"); }
 
         // 暴击率
-        public IAttribute CriticalHitRate { get => this.GetAttribute("CrtR"); }
+        public IAttribute CriticalHitRate { get => this.GetAttribute("CrtRt"); }
 
         // 暴击伤害
         public IAttribute CriticalHitDamage { get => this.GetAttribute("CrtD"); }
+
+        // 基础物理伤害
+        public IAttribute PhysicalDamage { get => this.GetAttribute("PhyD"); }
+
+        // 基础魔法伤害
+        public IAttribute MagicalDamage { get => this.GetAttribute("MagD"); }
 
         // 获取额外属性值
         public IAttribute GetAttribute(string attrName)

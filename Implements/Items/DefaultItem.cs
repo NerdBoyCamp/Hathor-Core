@@ -6,6 +6,10 @@ namespace Hathor
 
         protected string mID;
 
+        protected string mName;
+
+        protected string mDescription;
+
         protected IEventListener mListener = null;
 
         public IItemBattle mBattle = null;
@@ -14,17 +18,27 @@ namespace Hathor
 
         public IAbilities mAbilities = null;
 
-        public DefaultItem(IItemClass cls, string id)
+        public DefaultItem(
+            IItemClass cls,
+            string id,
+            string name,
+            string description
+        )
         {
             this.mCls = cls;
             this.mID = id;
+            this.mName = name;
+            this.mDescription = description;
         }
 
         // ID
         public string ID { get => this.mID; }
 
         // 名字
-        public string Name { get => this.mCls.Name; }
+        public string Name { get => this.mName; }
+
+        // 描述
+        public string Description { get => this.mDescription; }
 
         // 是否可用
         public bool IsUsable { get => true; }

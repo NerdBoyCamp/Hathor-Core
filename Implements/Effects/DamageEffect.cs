@@ -6,20 +6,24 @@ namespace Hathor
     {
         protected string mID;
 
+        protected string mName;
+
         protected string mSeries;
 
-        protected int mMaxDamage;
+        protected float mMaxDamage;
 
-        protected int mMinDamage;
+        protected float mMinDamage;
 
         public DamageEffectClass(
             string id,
+            string name,
             string series,
-            int maxDamage,
-            int minDamage
+            float maxDamage,
+            float minDamage
         )
         {
             this.mID = id;
+            this.mName = name;
             this.mSeries = series;
             this.mMaxDamage = Math.Max(maxDamage, minDamage);
             this.mMinDamage = Math.Min(maxDamage, minDamage);
@@ -31,7 +35,7 @@ namespace Hathor
         public string Series { get => this.mSeries; }
 
         // 名字
-        public string Name { get => ""; }
+        public string Name { get => this.mName; }
 
         // 描述
         public string Desctiption { get => ""; }
@@ -66,7 +70,7 @@ namespace Hathor
         // 通过角色生成
         public IEffect CreateByCharacter(ICharacter character)
         {
-            var battle = character.GetBattle();
+            ICharacterBattle battle = character.GetBattle();
             if (battle == null)
             {
                 return null;
@@ -74,8 +78,8 @@ namespace Hathor
 
             return new DamageEffect(
                 this,
-                Util.RamdonID(),
-                Util.RandomInt(this.mMinDamage, this.mMaxDamage));
+                Util.RandomID(),
+                (float)Util.RandomDouble(this.mMinDamage, this.mMaxDamage));
         }
 
         // 通过物品生成
@@ -87,25 +91,43 @@ namespace Hathor
                 return null;
             }
 
-            var battle = item.GetBattle();
-            if (battle == null)
+            IItemBattle itemBattle = item.GetBattle();
+            if (itemBattle == null)
+            {
+                return null;
+            }
+
+            ICharacter itemUser = itemBattle.User;
+            if (itemUser == null)
+            {
+                return null;
+            }
+
+            ICharacterBattle userBattle = itemUser.GetBattle();
+            if (userBattle == null)
             {
                 return null;
             }
 
             // 计算发挥度
-            var perf = battle.UserPerformance;
+            float perf = itemBattle.UserPerformance;
             if (perf <= 0)
             {
                 return null;
             }
 
-            var damage = Util.RandomInt(this.mMinDamage, this.mMaxDamage);
 
-            return new DamageEffect(
-                this,
-                Util.RamdonID(),
-                (int)((float)damage * perf));
+            float damage = (float)Util.RandomDouble(
+                this.mMinDamage, this.mMaxDamage) * perf;
+
+            IAttribute userAttr = userBattle.GetAttribute(this.mSeries);
+            if (userAttr != null)
+            {
+                // 加上人物基础伤害，如果有的话
+                damage += userAttr.Value;
+            }
+
+            return new DamageEffect(this, Util.RandomID(), damage);
         }
 
         class DamageEffect : IEffect
@@ -114,11 +136,11 @@ namespace Hathor
 
             protected string mID;
 
-            protected int mDamage;
+            protected float mDamage;
 
             protected bool mIsFinished = false;
 
-            public DamageEffect(DamageEffectClass cls, string id, int damage)
+            public DamageEffect(DamageEffectClass cls, string id, float damage)
             {
                 this.mCls = cls;
                 this.mID = id;
@@ -142,10 +164,11 @@ namespace Hathor
             // 对角色产生效果
             public void ApplyOnCharacter(ICharacter character)
             {
-                var battle = character.GetBattle();
+                ICharacterBattle battle = character.GetBattle();
                 if (battle != null)
                 {
-                    battle.HP.GetDamageBuffer(this.mCls.Series).Increase(this.mDamage);
+                    battle.HP.GetDamageBuffer(
+                        this.mCls.Series).Increase(this.mDamage);
                 }
                 this.mIsFinished = true;
             }

@@ -6,9 +6,6 @@ namespace Hathor
 {
     class DefaultAtionCreater : IActionCreater
     {
-        public string ID { get => "default"; }
-
-        public string Name { get => "Default Action Creater"; }
 
         public IAction[] CreateByBuilding(IBuilding building)
         {
@@ -18,7 +15,7 @@ namespace Hathor
         public IAction[] CreateByCharacter(ICharacter character)
         {
             IEnumerable<IAction> actions = new List<IAction>();
-            var abilities = character.GetAbilities();
+            IAbilities abilities = character.GetAbilities();
             if (abilities != null)
             {
                 actions = actions.Union(
@@ -27,12 +24,12 @@ namespace Hathor
                 );
             }
 
-            var equipments = character.GetEquipments();
+            ICharacterEquipments equipments = character.GetEquipments();
             if (equipments != null)
             {
-                foreach (var item in equipments.ListItem())
+                foreach (IItem item in equipments.ListItem())
                 {
-                    var itemAbilities = item.GetAbilities();
+                    IAbilities itemAbilities = item.GetAbilities();
                     if (itemAbilities != null)
                     {
                         actions = actions.Union(
@@ -48,7 +45,7 @@ namespace Hathor
 
         public IAction[] CreateByItem(IItem item)
         {
-            var abilities = item.GetAbilities();
+            IAbilities abilities = item.GetAbilities();
             if (abilities == null)
             {
                 return null;

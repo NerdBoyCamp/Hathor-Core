@@ -22,12 +22,13 @@ namespace Hathor
         public DefaultCharacterEquipments(ICharacter character)
         {
             this.mChar = character;
-            this.mSlots = new Dictionary<string, ItemSlot>();
-            this.mSlots["Head"] = new ItemSlot { item = null, series = "Helmet" };
-            this.mSlots["Main"] = new ItemSlot { item = null, series = "Weapon" };
-            this.mSlots["Chest"] = new ItemSlot { item = null, series = "Armor" };
-            this.mSlots["Waist"] = new ItemSlot { item = null, series = "Belt" };
-            this.mSlots["Feet"] = new ItemSlot { item = null, series = "Shoes" };
+            this.mSlots = new Dictionary<string, ItemSlot> {
+                { "Head", new ItemSlot { item = null, series = "Helmet" } },
+                { "Main", new ItemSlot { item = null, series = "Weapon" } },
+                { "Chest", new ItemSlot { item = null, series = "Armor" } },
+                { "Waist", new ItemSlot { item = null, series = "Belt" } },
+                { "Feet", new ItemSlot { item = null, series = "Shoes" } },
+            };
         }
 
         // 头

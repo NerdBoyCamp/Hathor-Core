@@ -34,8 +34,11 @@ namespace Hathor
         // 暴击伤害
         IAttribute CriticalHitDamage { get; }
 
-        // 物理伤害
-        // IAttribute PhysicalDamage { get; }
+        // 基础物理伤害
+        IAttribute PhysicalDamage { get; }
+
+        // 基础魔法伤害
+        IAttribute MagicalDamage { get; }
 
         // 获取额外属性值
         IAttribute GetAttribute(string attrName);

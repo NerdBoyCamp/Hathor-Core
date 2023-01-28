@@ -6,12 +6,12 @@ namespace Hathor
 
         protected string mSeries;
 
-        protected int mDefence;
+        protected float mDefence;
 
         public DefenceEffectClass(
             string id,
             string series,
-            int defence
+            float defence
         )
         {
             this.mID = id;
@@ -60,13 +60,13 @@ namespace Hathor
         // 通过角色生成
         public IEffect CreateByCharacter(ICharacter character)
         {
-            var battle = character.GetBattle();
+            ICharacterBattle battle = character.GetBattle();
             if (battle == null)
             {
                 return null;
             }
 
-            return new DefenceEffect(this, Util.RamdonID());
+            return new DefenceEffect(this, Util.RandomID());
         }
 
         // 通过物品生成
@@ -104,11 +104,11 @@ namespace Hathor
             // 对角色产生效果
             public void ApplyOnCharacter(ICharacter character)
             {
-                var battle = character.GetBattle();
+                ICharacterBattle battle = character.GetBattle();
                 if (battle != null)
                 {
-                    var buffer = battle.HP.GetDamageBuffer(this.mCls.Series);
-                    buffer.Increase(-this.mCls.mDefence);
+                    battle.HP.GetDamageBuffer(
+                        this.mCls.Series).Increase(-this.mCls.mDefence);
                 }
             }
 

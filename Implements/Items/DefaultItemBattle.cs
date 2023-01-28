@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Hathor
@@ -6,7 +7,7 @@ namespace Hathor
     {
         protected Dictionary<string, IAttribute> mAttributes;
 
-        public DefaultItemBattleAttributes(Dictionary<string, int> attrs)
+        public DefaultItemBattleAttributes(Dictionary<string, float> attrs)
         {
             this.mAttributes = new Dictionary<string, IAttribute>();
             foreach (var attr in attrs)
@@ -27,14 +28,13 @@ namespace Hathor
         // 获取额外属性需求值
         public IAttribute GetAttribute(string attrName)
         {
-            IAttribute attr = null;
-            this.mAttributes.TryGetValue(attrName, out attr);
+            this.mAttributes.TryGetValue(attrName, out IAttribute attr);
             return attr;
         }
 
-        public List<string> ListAttributeName()
+        public string[] ListAttributeName()
         {
-            return new List<string>(this.mAttributes.Keys);
+            return this.mAttributes.Keys.ToArray();
         }
     }
 
@@ -77,7 +77,7 @@ namespace Hathor
                 return;
             }
 
-            var battle = user.GetBattle();
+            ICharacterBattle battle = user.GetBattle();
             if (battle == null)
             {
                 return;
@@ -85,8 +85,8 @@ namespace Hathor
 
             foreach (var attrName in this.mEnhancements.ListAttributeName())
             {
-                var attr = this.mEnhancements.GetAttribute(attrName);
-                var attrChar = battle.GetAttribute(attrName);
+                IAttribute attr = this.mEnhancements.GetAttribute(attrName);
+                IAttribute attrChar = battle.GetAttribute(attrName);
                 if (attrChar != null)
                 {
                     this.mChanges.Add(attrChar.Increase(attr.Value));
@@ -106,7 +106,7 @@ namespace Hathor
                 return this.mUserPerformance;
             }
 
-            var battle = this.mUser.GetBattle();
+            ICharacterBattle battle = this.mUser.GetBattle();
             if (battle == null)
             {
                 return -1;
@@ -115,19 +115,12 @@ namespace Hathor
             float minPerf = 100;  // 最大发挥度
             foreach (var attrName in this.mRequirments.ListAttributeName())
             {
-                var attr = this.mRequirments.GetAttribute(attrName);
-                var attrChar = battle.GetAttribute(attrName);
-                if (attrChar != null)
+                IAttribute attr = this.mRequirments.GetAttribute(attrName);
+                IAttribute attrChar = battle.GetAttribute(attrName);
+                float perf = attrChar == null ? 0f : attrChar.OriginValue / attr.Value;
+                if (perf < minPerf)
                 {
-                    minPerf = 0;
-                }
-                else
-                {
-                    float perf = (float)attrChar.OriginValue / (float)attr.Value;
-                    if (perf < minPerf)
-                    {
-                        minPerf = perf;
-                    }
+                    minPerf = perf;
                 }
             }
             this.mUserPerformance = minPerf;
@@ -136,8 +129,8 @@ namespace Hathor
 
         public DefaultItemBattle(
             IItem item,
-            Dictionary<string, int> requirments,
-            Dictionary<string, int> enhancements
+            Dictionary<string, float> requirments,
+            Dictionary<string, float> enhancements
         )
         {
             this.mItem = item;

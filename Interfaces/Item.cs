@@ -12,6 +12,9 @@ namespace Hathor
 
         // 类别 头盔/武器/胸甲/鞋子/腰带/回复道具/...
         string Series { get; }
+
+        // 创建实例
+        IItem Create(dynamic configs);
     }
 
     public interface IItem
@@ -21,6 +24,9 @@ namespace Hathor
 
         // 名字
         string Name { get; }
+
+        // 描述
+        string Description { get; }
 
         // 是否可用
         bool IsUsable { get; }

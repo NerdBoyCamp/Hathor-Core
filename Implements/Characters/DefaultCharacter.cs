@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 
 namespace Hathor
 {
+    // 用户配置字段，仅供参考。不会被使用
     class DefaultCharacterConfig
     {
         public string Name { get; set; }
@@ -26,7 +28,7 @@ namespace Hathor
 
     class DefaultCharacterClass : ICharacterClass
     {
-        public string ID { get => "fZ4B8dNd6U+s"; }
+        public string ID { get => "Character"; }
 
         // 名字
         public string Name { get => "Default Character"; }
@@ -34,12 +36,12 @@ namespace Hathor
         // 描述
         public string Desctiption { get => this.Name; }
 
-        public ICharacter Create(object configs)
+        public ICharacter Create(dynamic configs)
         {
-            if (configs is DefaultCharacterConfig configObject)
+            try
             {
-                var character = new DefaultCharacter(this, Util.RamdonID());
-                character.Name = configObject.Name;
+                DefaultCharacter character = new(this, Util.RandomID());
+                character.Name = (string)configs.Name;
                 character.mEffects = new DefaultCharacterEffects(character);
                 character.mAbilities = new DefaultAbilities();
                 character.mStores = new DefaultCharacterStores(character);
@@ -47,22 +49,25 @@ namespace Hathor
                 character.mBattle = new DefaultCharacterBattle(
                     character,
                     new Dictionary<string, float> {
-                        { "MaxHP", configObject.MaxHP },
-                        { "MaxAP", configObject.MaxAP },
-                        { "Str", configObject.Strength },
-                        { "Int", configObject.Intelligence },
-                        { "Dex", configObject.Dexterity },
-                        { "CrtR", configObject.CriticalHitRate },
-                        { "CrtD", configObject.CriticalHitDamage },
+                        { "MaxHP", (float)configs.MaxHP },
+                        { "MaxAP", (float)configs.MaxAP },
+                        { "Str", (float)configs.Strength },
+                        { "Int", (float)configs.Intelligence },
+                        { "Dex", (float)configs.Dexterity },
+                        { "CrtRt", (float)configs.CriticalHitRate },
+                        { "CrtD", (float)configs.CriticalHitDamage },
                     },
-                    configObject.HP,
-                    configObject.AP
+                    (float)configs.HP,
+                    (float)configs.AP
                 );
-
                 return character;
+            } 
+            catch (Exception e)
+            {
+                // 任何异常都将创建失败
+                Console.Error.WriteLine(e.ToString());
+                return null;
             }
-            
-            return null;
         }
     }
 

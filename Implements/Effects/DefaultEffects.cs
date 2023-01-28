@@ -41,7 +41,7 @@ namespace Hathor
         // 添加效果
         public virtual IEffect AddEffect(IEffect effect)
         {
-            var effectClass = effect.GetClass();
+            IEffectClass effectClass = effect.GetClass();
             int index =
                 this
                     .mEffects

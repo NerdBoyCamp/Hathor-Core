@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-
-
 namespace Hathor
 {
     // 物品装备推荐条件（决定发挥度）
@@ -19,7 +16,7 @@ namespace Hathor
         IAttribute GetAttribute(string attrName);
 
         // 列出所有属性名
-        List<string> ListAttributeName();
+        string[] ListAttributeName();
     }
 
     public interface IItemBattle

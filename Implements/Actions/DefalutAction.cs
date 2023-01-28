@@ -52,12 +52,12 @@ namespace Hathor
         // 对角色施放
         public void ApplyOnCharacter(ICharacter character)
         {
-            var effects = character.GetEffects();
+            IEffects effects = character.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByCharacter(this.mChar);
+            IEffect effect = this.mAbility.CreateByCharacter(this.mChar);
             if (effect == null)
             {
                 return;
@@ -69,12 +69,12 @@ namespace Hathor
         // 对物品施放
         public void ApplyOnItem(IItem item)
         {
-            var effects = item.GetEffects();
+            IEffects effects = item.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByCharacter(this.mChar);
+            IEffect effect = this.mAbility.CreateByCharacter(this.mChar);
             if (effect == null)
             {
                 return;
@@ -86,12 +86,12 @@ namespace Hathor
         // 直接施放
         public void Apply()
         {
-            var effects = this.mChar.GetEffects();
+            IEffects effects = this.mChar.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByCharacter(this.mChar);
+            IEffect effect = this.mAbility.CreateByCharacter(this.mChar);
             if (effect == null)
             {
                 return;
@@ -152,12 +152,12 @@ namespace Hathor
         // 对角色施放
         public void ApplyOnCharacter(ICharacter character)
         {
-            var effects = character.GetEffects();
+            IEffects effects = character.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByItem(this.mItem);
+            IEffect effect = this.mAbility.CreateByItem(this.mItem);
             if (effect == null)
             {
                 return;
@@ -169,12 +169,12 @@ namespace Hathor
         // 对物品施放
         public void ApplyOnItem(IItem item)
         {
-            var effects = item.GetEffects();
+            IEffects effects = item.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByItem(this.mItem);
+            IEffect effect = this.mAbility.CreateByItem(this.mItem);
             if (effect == null)
             {
                 return;
@@ -186,12 +186,12 @@ namespace Hathor
         // 直接施放
         public void Apply()
         {
-            var effects = this.mItem.GetEffects();
+            IEffects effects = this.mItem.GetEffects();
             if (effects == null)
             {
                 return;
             }
-            var effect = this.mAbility.CreateByItem(this.mItem);
+            IEffect effect = this.mAbility.CreateByItem(this.mItem);
             if (effect == null)
             {
                 return;
