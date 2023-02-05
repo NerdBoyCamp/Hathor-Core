@@ -40,7 +40,8 @@ namespace Hathor
         {
             try
             {
-                DefaultCharacter character = new(this, Util.RandomID());
+                DefaultCharacter character =
+                    new DefaultCharacter(this, Util.RandomID());
                 character.Name = (string)configs.Name;
                 character.mEffects = new DefaultCharacterEffects(character);
                 character.mAbilities = new DefaultAbilities();

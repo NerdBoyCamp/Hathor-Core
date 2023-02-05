@@ -95,7 +95,7 @@ namespace Hathor
                     {
                         foreach (var i in iter)
                         {
-                            if (i is not string abilityName)
+                            if (!(i is string abilityName))
                             {
                                 throw new Exception("invalid item ability found");
                             }

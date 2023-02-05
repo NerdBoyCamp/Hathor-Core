@@ -40,7 +40,7 @@ namespace Hathor
         {
             try
             {
-                DefaultItem item = new(
+                DefaultItem item = new DefaultItem(
                     this, Util.RandomID(),
                     (string)configs.Name,
                     (string)configs.Description

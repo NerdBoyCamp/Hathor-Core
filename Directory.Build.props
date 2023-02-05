@@ -1,8 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <OutputPath>Builds/bin</OutputPath>
-    <IntermediateOutputPath>Builds/obj</IntermediateOutputPath>
-    <BaseIntermediateOutputPath>Builds/obj</BaseIntermediateOutputPath>
-    <MSBUildProjectExtensionsPath>Builds/tmp</MSBUildProjectExtensionsPath>
-  </PropertyGroup>
-</Project>

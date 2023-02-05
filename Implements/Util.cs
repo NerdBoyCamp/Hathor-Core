@@ -4,7 +4,7 @@ namespace Hathor
 {
     public class Util
     {
-        protected static readonly Random rnd = new();
+        protected static readonly Random rnd = new Random();
 
         public static string RandomID()
         {

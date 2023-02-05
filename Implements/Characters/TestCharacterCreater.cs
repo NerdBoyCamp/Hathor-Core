@@ -74,7 +74,7 @@ namespace Hathor
                 },
             };
 
-            Console.WriteLine("可选角色：");
+            Console.WriteLine("??????????");
 
             foreach(var c in this.mConfigs)
             {
@@ -109,7 +109,7 @@ namespace Hathor
                     {
                         foreach (var i in iter)
                         {
-                            if (i is not string abilityName)
+                            if (!(i is string abilityName))
                             {
                                 throw new Exception("invalid character ability found");
                             }
@@ -129,7 +129,7 @@ namespace Hathor
                                 ability.IsAppliableOnCharacter
                             )
                             {
-                                // 尝试直接施放
+                                // ????????????
                                 IEffects effects = c.GetEffects();
                                 IEffect effect = ability.CreateByCharacter(c);
                                 if (effect != null && effects != null)
@@ -141,7 +141,7 @@ namespace Hathor
 
                             if (!isApplied)
                             {
-                                // 不能直接施放的技能装备起来
+                                // ??????????????????????????
                                 abilities.AddAbility(ability);
                             }
                         }
