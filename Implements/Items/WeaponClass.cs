@@ -36,36 +36,36 @@ namespace Hathor
         public string Series { get => "Weapon"; }
 
         // 创建实例
-        public IItem Create(dynamic configs)
+        public IItem Create(object configs)
         {
             try
             {
                 DefaultItem item = new DefaultItem(
                     this, Util.RandomID(),
-                    (string)configs.Name,
-                    (string)configs.Description
+                    Util.GetConfigAsString(configs, "Name"),
+                    Util.GetConfigAsString(configs, "Description")
                 );
                 item.mAbilities = new DefaultAbilities();
                 item.mAbilities.AddAbility(new DamageEffectClass(
                     Util.RandomID(),
                     "Attack",
                     "Phy",
-                    (float)configs.MaxPhysicalDamage,
-                    (float)configs.MinPhysicalDamage
+                    Util.GetConfigAsFloat(configs, "MaxPhysicalDamage"),
+                    Util.GetConfigAsFloat(configs, "MinPhysicalDamage")
                 ));
                 item.mBattle = new DefaultItemBattle(
                     item,
                     new Dictionary<string, float>
                     {
-                        { "Str", (float)configs.StrengthRequired },
-                        { "Int", (float)configs.IntelligenceRequired },
-                        { "Dex", (float)configs.DexterityRequired },
+                        { "Str", Util.GetConfigAsFloat(configs, "StrengthRequired") },
+                        { "Int", Util.GetConfigAsFloat(configs, "IntelligenceRequired") },
+                        { "Dex", Util.GetConfigAsFloat(configs, "DexterityRequired") },
                     },
                     new Dictionary<string, float>
                     {
-                        { "Str", (float)configs.StrengthIncrease },
-                        { "Int", (float)configs.IntelligenceIncrease },
-                        { "Dex", (float)configs.DexterityIncrease },
+                        { "Str", Util.GetConfigAsFloat(configs, "StrengthIncrease") },
+                        { "Int", Util.GetConfigAsFloat(configs, "IntelligenceIncrease") },
+                        { "Dex", Util.GetConfigAsFloat(configs, "DexterityIncrease") },
                     }
                 );
                 return item;

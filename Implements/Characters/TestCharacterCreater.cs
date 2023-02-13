@@ -6,7 +6,7 @@ namespace Hathor
 {
     class TestCharacterCreater : ICharacterCreater
     {
-        protected Dictionary<string, dynamic> mConfigs;
+        protected Dictionary<string, object> mConfigs;
 
         protected ICharacterClass mCls = new DefaultCharacterClass();
 
@@ -90,7 +90,7 @@ namespace Hathor
         {
             try
             {
-                this.mConfigs.TryGetValue(templateId, out dynamic configs);
+                this.mConfigs.TryGetValue(templateId, out object configs);
                 if (configs == null)
                 {
                     return null;

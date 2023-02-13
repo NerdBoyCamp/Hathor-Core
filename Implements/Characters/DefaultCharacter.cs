@@ -36,13 +36,13 @@ namespace Hathor
         // 描述
         public string Desctiption { get => this.Name; }
 
-        public ICharacter Create(dynamic configs)
+        public ICharacter Create(object configs)
         {
             try
             {
                 DefaultCharacter character =
                     new DefaultCharacter(this, Util.RandomID());
-                character.Name = (string)configs.Name;
+                character.Name = Util.GetConfigAsString(configs, "Name");
                 character.mEffects = new DefaultCharacterEffects(character);
                 character.mAbilities = new DefaultAbilities();
                 character.mStores = new DefaultCharacterStores(character);
@@ -50,16 +50,16 @@ namespace Hathor
                 character.mBattle = new DefaultCharacterBattle(
                     character,
                     new Dictionary<string, float> {
-                        { "MaxHP", (float)configs.MaxHP },
-                        { "MaxAP", (float)configs.MaxAP },
-                        { "Str", (float)configs.Strength },
-                        { "Int", (float)configs.Intelligence },
-                        { "Dex", (float)configs.Dexterity },
-                        { "CrtRt", (float)configs.CriticalHitRate },
-                        { "CrtD", (float)configs.CriticalHitDamage },
+                        { "MaxHP", Util.GetConfigAsFloat(configs, "MaxHP") },
+                        { "MaxAP", Util.GetConfigAsFloat(configs, "MaxAP") },
+                        { "Str", Util.GetConfigAsFloat(configs, "Strength") },
+                        { "Int", Util.GetConfigAsFloat(configs, "Intelligence") },
+                        { "Dex", Util.GetConfigAsFloat(configs, "Dexterity") },
+                        { "CrtRt", Util.GetConfigAsFloat(configs, "CriticalHitRate") },
+                        { "CrtD", Util.GetConfigAsFloat(configs, "CriticalHitDamage") },
                     },
-                    (float)configs.HP,
-                    (float)configs.AP
+                    Util.GetConfigAsFloat(configs, "HP"),
+                    Util.GetConfigAsFloat(configs, "AP")
                 );
                 return character;
             } 

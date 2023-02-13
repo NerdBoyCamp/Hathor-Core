@@ -6,13 +6,13 @@ namespace Hathor
 {
     class DefaultItemCreater : IItemCreater
     {
-        protected Dictionary<string, dynamic> mConfigs;
+        protected Dictionary<string, object> mConfigs;
 
         protected Dictionary<string, IItemClass> mClasses;
 
         public DefaultItemCreater()
         {
-            this.mConfigs = new Dictionary<string, dynamic>
+            this.mConfigs = new Dictionary<string, object>
             {
                 // TODO: ....
             };
@@ -30,13 +30,16 @@ namespace Hathor
         {
             try
             {
-                this.mConfigs.TryGetValue(templateId, out dynamic configs);
+                this.mConfigs.TryGetValue(templateId, out object configs);
                 if (configs == null)
                 {
                     return null;
                 }
 
-                this.mClasses.TryGetValue(configs.Type, out IItemClass cls);
+                this.mClasses.TryGetValue(
+                    Util.GetConfigAsString(configs, "Type"),
+                    out IItemClass cls
+                );
                 if (cls == null)
                 {
                     return null;
@@ -51,8 +54,7 @@ namespace Hathor
                 IAbilities abilities = item.GetAbilities();
                 if (abilities != null)
                 {
-                    IEnumerable iter = (configs.Abilities as IEnumerable);
-                    if (iter != null)
+                    if (Util.GetConfigAsObject(configs, "Abilities") is IEnumerable iter)
                     {
                         foreach (var abilityName in iter)
                         {

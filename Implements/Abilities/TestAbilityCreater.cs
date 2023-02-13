@@ -5,7 +5,7 @@ namespace Hathor
 {
     class TestAbilityCreater : IAbilityCreater
     {
-        protected Dictionary<string, dynamic> mConfigs;
+        protected Dictionary<string, object> mConfigs;
 
         protected Dictionary<string, IEffectClass> mCache;
 
@@ -13,7 +13,7 @@ namespace Hathor
         {
             try
             {
-                this.mConfigs.TryGetValue(templateId, out dynamic configs);
+                this.mConfigs.TryGetValue(templateId, out object configs);
                 if (configs == null)
                 {
                     return null;
@@ -102,7 +102,7 @@ namespace Hathor
         public TestAbilityCreater()
         {
             this.mCache = new Dictionary<string, IEffectClass>();
-            this.mConfigs = new Dictionary<string, dynamic>
+            this.mConfigs = new Dictionary<string, object>
             {
                 {
                     "TestAbility1", new {
