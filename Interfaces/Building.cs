@@ -28,6 +28,6 @@ namespace Hathor
         IBuildingUpgrade GetUpgrade();
 
         // 当前建筑更新
-        void Update();
+        void Update(float deltaTime);
     }
 }

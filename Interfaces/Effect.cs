@@ -58,12 +58,12 @@ namespace Hathor
         IEffectClass GetClass();
 
         // 对建筑产生效果
-        void ApplyOnBuilding(IBuilding building);
+        void UpdateOnBuilding(IBuilding building, float deltaTime);
 
         // 对角色产生效果
-        void ApplyOnCharacter(ICharacter character);
+        void UpdateOnCharacter(ICharacter character, float deltaTime);
 
         // 对物品产生效果
-        void ApplyOnItem(IItem item);
+        void UpdateOnItem(IItem item, float deltaTime);
     }
 }

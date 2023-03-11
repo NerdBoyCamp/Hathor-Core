@@ -26,9 +26,9 @@ namespace Hathor
         }
 
         // 删除效果
-        protected override void ApplyEffect(IEffect effect)
+        protected override void ApplyEffect(IEffect effect, float deltaTime)
         {
-            effect.ApplyOnCharacter(this.mChar);
+            effect.UpdateOnCharacter(this.mChar, deltaTime);
 
             // 发送消息通知
             this.mChar.Publish(new EffectEvent { Effect = effect });

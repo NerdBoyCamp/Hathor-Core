@@ -31,6 +31,6 @@ namespace Hathor
         IItem[] ListItem();
 
         // 更新所有装备状态/每帧调用
-        void Update();
+        void Update(float deltaTime);
     }
 }

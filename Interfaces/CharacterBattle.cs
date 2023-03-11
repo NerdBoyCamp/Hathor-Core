@@ -44,6 +44,6 @@ namespace Hathor
         IAttribute GetAttribute(string attrName);
 
         // 更新属性
-        void Update();
+        void Update(float deltaTime);
     }
 }

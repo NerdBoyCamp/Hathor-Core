@@ -10,25 +10,25 @@ namespace Hathor
 
         protected float mHealAmount; // 回复的HP
 
-        protected double mHealSeconds; // 在多少时间内回复
+        protected float mHealTime; // 在多少时间内回复
 
-        protected double mHealAmountPerSec; // 平均每秒回复HP
+        protected float mHealAmountPerSec; // 平均每秒回复HP
 
         public HealEffectClass(
             string id,
             string series,
             float healAmount,
-            double healSeconds
+            float healTime
         )
         {
             this.mID = id;
             this.mSeries = series;
             this.mHealAmount = healAmount;
-            this.mHealSeconds = healSeconds;
+            this.mHealTime = healTime;
             this.mHealAmountPerSec =
-                this.mHealSeconds == 0 ?
-                (double)this.mHealAmount :
-                (double)this.mHealAmount / this.mHealSeconds;
+                this.mHealTime == 0.0f ?
+                this.mHealAmount :
+                this.mHealAmount / this.mHealTime;
         }
 
         public string ID { get => this.mID; }
@@ -90,14 +90,14 @@ namespace Hathor
 
             protected float mHealAmount; // 已经回复的HP
 
-            protected double mHealStartSeconds; // 开始回复的时间(秒)
+            protected float mHealTime; // 已经回复的时间
 
             public HealEffect(HealEffectClass cls, string id)
             {
                 this.mCls = cls;
                 this.mID = id;
-                this.mHealAmount = 0;
-                this.mHealStartSeconds = DateTime.UtcNow.Ticks / 10000000.0;
+                this.mHealAmount = 0.0f;
+                this.mHealTime = 0.0f;
             }
 
             public string ID { get => this.mID; }
@@ -112,50 +112,54 @@ namespace Hathor
             public IEffectClass GetClass() { return this.mCls; }
 
             // 对建筑产生效果
-            public void ApplyOnBuilding(IBuilding building) { }
+            public void UpdateOnBuilding(IBuilding building, float deltaTime) { }
 
             // 对角色产生效果
-            public void ApplyOnCharacter(ICharacter character)
+            public void UpdateOnCharacter(ICharacter character, float deltaTime)
             {
+                if (this.mHealAmount >= this.mCls.mHealAmount)
+                {
+                    // no need to heal any more
+                    return;
+                }
+
                 ICharacterBattle battle = character.GetBattle();
                 if (battle == null)
                 {
+                    // make this effect finish
                     this.mHealAmount = this.mCls.mHealAmount;
                     return;
                 }
 
-                if (this.mCls.mHealSeconds == 0)
+                if (this.mCls.mHealTime == 0.0f)
                 {
+                    // make this effect finish
                     this.mHealAmount = this.mCls.mHealAmount;
-                    battle.HP.GetHealingBuffer(
-                        this.mCls.Series).Increase(this.mHealAmount);
+                    // add all healamount to character
+                    battle.HP.GetHealingBuffer(this.mCls.Series).Increase(this.mHealAmount);
                     return;
                 }
 
-                double healCurSeconds = DateTime.UtcNow.Ticks / 10000000.0;
-                float healAmount = (float)(this.mCls.mHealAmountPerSec *
-                    (healCurSeconds - this.mHealStartSeconds));
+                
+                float deltaHealAmount = this.mCls.mHealAmountPerSec * deltaTime;
+                float healAmount = this.mHealAmount + deltaHealAmount;
+                
                 if (healAmount > this.mCls.mHealAmount)
                 {
-                    // 不能超过总回复HP
-                    healAmount = this.mCls.mHealAmount;
+                    // 调整回复血量，不超过最大值
+                    deltaHealAmount = this.mCls.mHealAmount - this.mHealAmount;
+                    this.mHealAmount = this.mCls.mHealAmount;
                 }
-                float healAmountDelta = healAmount - this.mHealAmount;
-                if (healAmountDelta <= 0)
+                else
                 {
-                    return;
+                    this.mHealAmount = healAmount;
                 }
 
-                {
-                    battle.HP.GetHealingBuffer(
-                        this.mCls.Series).Increase(healAmountDelta);
-                }
-
-                this.mHealAmount = healAmount;
+                battle.HP.GetHealingBuffer(this.mCls.Series).Increase(deltaHealAmount);
             }
 
             // 对物品产生效果
-            public void ApplyOnItem(IItem item) { }
+            public void UpdateOnItem(IItem item, float deltaTime) { }
         }
     }
 }

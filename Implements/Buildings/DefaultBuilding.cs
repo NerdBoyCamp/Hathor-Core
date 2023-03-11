@@ -47,7 +47,7 @@
         }
 
         // 当前建筑更新
-        public void Update()
+        public void Update(float deltaTime)
         {
             // do nothing
         }

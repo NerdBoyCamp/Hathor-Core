@@ -159,21 +159,21 @@ namespace Hathor
         }
 
         // 更新角色/每帧调用
-        public void Update()
+        public void Update(float deltaTime)
         {
             if (this.mEffects != null)
             {
-                this.mEffects.Update();
+                this.mEffects.Update(deltaTime);
             }
 
             if (this.mEquipments != null)
             {
-                this.mEquipments.Update();
+                this.mEquipments.Update(deltaTime);
             }
 
             if (this.mBattle != null)
             {
-                this.mBattle.Update();
+                this.mBattle.Update(deltaTime);
             }
         }
     }

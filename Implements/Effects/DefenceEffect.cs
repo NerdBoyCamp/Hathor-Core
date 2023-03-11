@@ -99,10 +99,10 @@ namespace Hathor
             public IEffectClass GetClass() { return this.mCls; }
 
             // 对建筑产生效果
-            public void ApplyOnBuilding(IBuilding building) { }
+            public void UpdateOnBuilding(IBuilding building, float deltaTime) { }
 
             // 对角色产生效果
-            public void ApplyOnCharacter(ICharacter character)
+            public void UpdateOnCharacter(ICharacter character, float deltaTime)
             {
                 ICharacterBattle battle = character.GetBattle();
                 if (battle != null)
@@ -113,7 +113,7 @@ namespace Hathor
             }
 
             // 对物品产生效果
-            public void ApplyOnItem(IItem item) { }
+            public void UpdateOnItem(IItem item, float deltaTime) { }
         }
     }
 }

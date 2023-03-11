@@ -12,6 +12,6 @@ namespace Hathor
         IItem FindItem(string itemID);
 
         // 场景更新
-        void Update();
+        void Update(float deltaTime);
     }
 }

@@ -89,7 +89,7 @@ namespace Hathor
             return this.mEffects.ToArray();
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
             this.SortEffects();
             for (int i = this.mEffects.Count - 1; i >= 0; i--)
@@ -103,13 +103,13 @@ namespace Hathor
                 }
                 else
                 {
-                    this.ApplyEffect(eff);
+                    this.ApplyEffect(eff, deltaTime);
                 }
             }
         }
 
         // 施加影响逻辑
-        protected virtual void ApplyEffect(IEffect effect)
+        protected virtual void ApplyEffect(IEffect effect, float deltaTime)
         {
             // do nothing
         }

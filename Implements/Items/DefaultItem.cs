@@ -72,11 +72,11 @@ namespace Hathor
         }
 
         // 更新物品/每帧调用
-        public void Update()
+        public void Update(float deltaTime)
         {
             if (this.mEffects != null)
             {
-                this.mEffects.Update();
+                this.mEffects.Update(deltaTime);
             }
         }
     }

@@ -12,6 +12,6 @@ namespace Hathor
         IEffect[] ListEffects();
 
         // 更新效果
-        void Update();
+        void Update(float deltaTime);
     }
 }

@@ -69,7 +69,7 @@ namespace Hathor
             return value;
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
             // 刷新下血量
             if (this.mHP.Value <= 0)

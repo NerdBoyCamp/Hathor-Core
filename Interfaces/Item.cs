@@ -53,6 +53,6 @@ namespace Hathor
         void Subscribe(IEventListener listener);
 
         // 更新物品/每帧调用
-        void Update();
+        void Update(float deltaTime);
     }
 }

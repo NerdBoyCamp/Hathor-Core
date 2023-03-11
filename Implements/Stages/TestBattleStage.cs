@@ -6,17 +6,22 @@ namespace Hathor
     class TestBattleActionEvent : IEvent
     {
         public string Series { get => "test"; }
-
         public ICharacter Attacker;
-
         public ICharacter Defender;
     }
 
     class TestBattleStage : IStage, IEventListener
     {
         protected IActionCreater mActionCreater;
+        protected ICharacter mAttacker;
+        protected ICharacter mDefender;
 
-        protected ICharacter[] mCharacters;
+        protected enum EnumStatus {
+            STATUS_ACT,
+            STATUS_WAIT,
+        };
+        protected EnumStatus mStatus;
+        protected float mStatusTime;  // current status running time
 
         public TestBattleStage(
             IActionCreater actionCreater,
@@ -24,11 +29,13 @@ namespace Hathor
         )
         {
             this.mActionCreater = actionCreater;
-            this.mCharacters = characters;
-            foreach (var ch in characters)
-            {
-                ch.Subscribe(this);
-            }
+            this.mAttacker = characters[0];
+            this.mDefender = characters[1];
+            this.mStatus = EnumStatus.STATUS_ACT;
+            this.mStatusTime = 0.0f;
+
+            this.mAttacker.Subscribe(this);
+            this.mDefender.Subscribe(this);
         }
 
         // 查找建筑
@@ -40,12 +47,14 @@ namespace Hathor
         // 查找角色
         public ICharacter FindCharacter(string characterID)
         {
-            foreach (var ch in this.mCharacters)
+            if (this.mAttacker.ID == characterID)
             {
-                if (ch.ID == characterID)
-                {
-                    return ch;
-                }
+                return this.mAttacker;
+            }
+
+            if (this.mDefender.ID == characterID)
+            {
+                return this.mDefender;
             }
 
             return null;
@@ -113,7 +122,6 @@ namespace Hathor
                     // 释放到别人身上
                     actionSelected.ApplyOnCharacter(actionEvent.Defender);
                 }
-
             }
             else
             {
@@ -123,48 +131,44 @@ namespace Hathor
         }
 
         // 场景更新
-        public void Update()
+        public void Update(float deltaTime)
         {
-            int attackerIndex = 0;
-            int defenderIndex = 1;
-
-            while (true)
+            switch (mStatus)
             {
-                // 持续更新2秒
-                var startTime = DateTime.UtcNow.Ticks;
-                while (true)
-                {
-                    foreach (var ch in this.mCharacters)
+                case EnumStatus.STATUS_WAIT:
+                    this.mAttacker.Update(deltaTime);
+                    this.mDefender.Update(deltaTime);
+                    this.mStatusTime += deltaTime;
+                    if (this.mStatusTime > 2.0f)
                     {
-                        ch.Update();
+                        // 持续更新2秒跳转到等待指令状态
+                        this.mStatus = EnumStatus.STATUS_ACT;
+                        this.mStatusTime = 0.0f;
+                        // 显示当前状态
+                        Console.WriteLine(string.Format(
+                            "{0}剩余HP：{1}",
+                            this.mAttacker.Name,
+                            this.mAttacker.GetBattle().HP.Value));
+                        Console.WriteLine(string.Format(
+                            "{0}剩余HP：{1}",
+                            this.mDefender.Name,
+                            this.mDefender.GetBattle().HP.Value));
                     }
-
-                    var deltaTime = DateTime.UtcNow.Ticks - startTime;
-                    if (deltaTime / 10000000.0 >= 3.0)
-                    {// 更新满3秒钟
-                        break;
-                    }
-                }
-
-                // 等待指令
-                var attacker = this.mCharacters[attackerIndex];
-                var defender = this.mCharacters[defenderIndex];
-
-                Console.WriteLine(string.Format(
-                    "{0}剩余HP：{1}", attacker.Name, attacker.GetBattle().HP.Value));
-                Console.WriteLine(string.Format(
-                    "{0}剩余HP：{1}", defender.Name, defender.GetBattle().HP.Value));
-
-                // 选择攻击技能释放
-                this.OnNotify(new TestBattleActionEvent()
-                {
-                    Attacker = attacker,
-                    Defender = defender
-                });
-
-                var tempIndex = attackerIndex;
-                attackerIndex = defenderIndex;
-                defenderIndex = tempIndex;
+                    break;
+                case EnumStatus.STATUS_ACT:
+                    // 处理玩家指令
+                    this.OnNotify(new TestBattleActionEvent()
+                    {
+                        Attacker = this.mAttacker,
+                        Defender = this.mDefender,
+                    });
+                    this.mStatus = EnumStatus.STATUS_WAIT;
+                    this.mStatusTime = 0.0f;
+                    // 转换角色
+                    var character = this.mAttacker;
+                    this.mAttacker = this.mDefender;
+                    this.mDefender = character;
+                    break;
             }
         }
     }

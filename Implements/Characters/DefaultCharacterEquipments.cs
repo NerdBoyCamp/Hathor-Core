@@ -108,13 +108,13 @@ namespace Hathor
                 slot => slot.item != null).Select(slot => slot.item).ToArray();
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
             foreach (var slot in mSlots.Values)
             {
                 if (slot.item != null)
                 {
-                    slot.item.Update();
+                    slot.item.Update(deltaTime);
                 }
             }
         }
